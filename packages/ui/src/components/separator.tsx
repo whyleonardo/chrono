@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import { Separator as SeparatorPrimitive } from "@chrono/ui/components/separator";
+import { Separator as SeparatorPrimitive } from "@base-ui/react/separator"
 
-import { cn } from "@chrono/ui/lib/utils";
+import { cn } from "@chrono/ui/lib/utils"
 
 function Separator({
-	className,
-	orientation = "horizontal",
-	...props
+  className,
+  orientation = "horizontal",
+  ...props
 }: SeparatorPrimitive.Props) {
-	return (
-		<SeparatorPrimitive
-			className={cn(
-				"shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch",
-				className
-			)}
-			data-slot="separator"
-			orientation={orientation}
-			{...props}
-		/>
-	);
+  return (
+    <SeparatorPrimitive
+      data-slot="separator"
+      orientation={orientation}
+      className={cn(
+        "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch",
+        className
+      )}
+      {...props}
+    />
+  )
 }
 
-export { Separator };
+export { Separator }
