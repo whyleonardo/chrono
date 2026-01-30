@@ -12,9 +12,7 @@
       "types": "./src/lib/*.d.ts",
       "import": "./src/lib/*.ts"
     },
-    "./styles/*": {
-      "import": "./src/styles/*"
-    }
+    "./styles/*": "./src/styles/*"
   },
   "scripts": {
     "check-types": "tsc --noEmit"
