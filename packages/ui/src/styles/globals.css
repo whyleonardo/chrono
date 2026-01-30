@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Tailwind Theme Extensions for Mood Colors */
+@theme inline {
+	/* Background colors */
+	--color-mood-flow-bg: var(--mood-flow-bg);
+	--color-mood-buggy-bg: var(--mood-buggy-bg);
+	--color-mood-learning-bg: var(--mood-learning-bg);
+	--color-mood-meetings-bg: var(--mood-meetings-bg);
+	--color-mood-standard-bg: var(--mood-standard-bg);
+
+	/* Text colors */
+	--color-mood-flow-text: var(--mood-flow-text);
+	--color-mood-buggy-text: var(--mood-buggy-text);
+	--color-mood-learning-text: var(--mood-learning-text);
+	--color-mood-meetings-text: var(--mood-meetings-text);
+	--color-mood-standard-text: var(--mood-standard-text);
+
+	/* Border colors */
+	--color-mood-flow-border: var(--mood-flow-border);
+	--color-mood-buggy-border: var(--mood-buggy-border);
+	--color-mood-learning-border: var(--mood-learning-border);
+	--color-mood-meetings-border: var(--mood-meetings-border);
+	--color-mood-standard-border: var(--mood-standard-border);
+}
+
+/* Light Mode CSS Variables */
+:root {
+	--radius: 0.625rem;
+	--background: 0 0% 100%;
+	--foreground: 0 0% 3.9%;
+	--card: 0 0% 100%;
+	--card-foreground: 0 0% 3.9%;
+	--popover: 0 0% 100%;
+	--popover-foreground: 0 0% 3.9%;
+	--primary: 0 0% 9%;
+	--primary-foreground: 0 0% 98%;
+	--secondary: 0 0% 96.1%;
+	--secondary-foreground: 0 0% 9%;
+	--muted: 0 0% 96.1%;
+	--muted-foreground: 0 0% 45.1%;
+	--accent: 0 0% 96.1%;
+	--accent-foreground: 0 0% 9%;
+	--destructive: 0 84.2% 60.2%;
+	--destructive-foreground: 0 0% 98%;
+	--border: 0 0% 89.8%;
+	--input: 0 0% 89.8%;
+	--ring: 0 0% 3.9%;
+
+	/* Mood Colors - Light Mode */
+	--mood-flow-bg: #dcfce7;
+	--mood-flow-text: #166534;
+	--mood-flow-border: #22c55e;
+
+	--mood-buggy-bg: #fee2e2;
+	--mood-buggy-text: #991b1b;
+	--mood-buggy-border: #ef4444;
+
+	--mood-learning-bg: #dbeafe;
+	--mood-learning-text: #1e40af;
+	--mood-learning-border: #3b82f6;
+
+	--mood-meetings-bg: #fef9c3;
+	--mood-meetings-text: #854d0e;
+	--mood-meetings-border: #eab308;
+
+	--mood-standard-bg: #f3f4f6;
+	--mood-standard-text: #374151;
+	--mood-standard-border: #9ca3af;
+}
+
+/* Dark Mode CSS Variables */
+.dark {
+	--background: 0 0% 3.9%;
+	--foreground: 0 0% 98%;
+	--card: 0 0% 3.9%;
+	--card-foreground: 0 0% 98%;
+	--popover: 0 0% 3.9%;
+	--popover-foreground: 0 0% 98%;
+	--primary: 0 0% 98%;
+	--primary-foreground: 0 0% 9%;
+	--secondary: 0 0% 14.9%;
+	--secondary-foreground: 0 0% 98%;
+	--muted: 0 0% 14.9%;
+	--muted-foreground: 0 0% 63.9%;
+	--accent: 0 0% 14.9%;
+	--accent-foreground: 0 0% 98%;
+	--destructive: 0 62.8% 30.6%;
+	--destructive-foreground: 0 0% 98%;
+	--border: 0 0% 14.9%;
+	--input: 0 0% 14.9%;
+	--ring: 0 0% 83.1%;
+
+	/* Mood Colors - Dark Mode (High Contrast) */
+	--mood-flow-bg: #14532d;
+	--mood-flow-text: #86efac;
+	--mood-flow-border: #22c55e;
+
+	--mood-buggy-bg: #7f1d1d;
+	--mood-buggy-text: #fca5a5;
+	--mood-buggy-border: #ef4444;
+
+	--mood-learning-bg: #1e3a8a;
+	--mood-learning-text: #93c5fd;
+	--mood-learning-border: #3b82f6;
+
+	--mood-meetings-bg: #713f12;
+	--mood-meetings-text: #fde047;
+	--mood-meetings-border: #eab308;
+
+	--mood-standard-bg: #1f2937;
+	--mood-standard-text: #9ca3af;
+	--mood-standard-border: #4b5563;
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
