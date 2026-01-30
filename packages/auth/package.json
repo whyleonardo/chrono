@@ -1,0 +1,24 @@
+{
+  "name": "@chrono/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@chrono/db": "workspace:*",
+    "@chrono/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@chrono/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
