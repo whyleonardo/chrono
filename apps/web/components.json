@@ -1,24 +1,29 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "base-lyra",
-  "rsc": false,
+  "rsc": true,
   "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "src/index.css",
+    "css": "../../packages/ui/src/styles/globals.css",
     "baseColor": "neutral",
-    "cssVariables": true,
-    "prefix": ""
+    "cssVariables": true
   },
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
+    "hooks": "@/hooks",
     "lib": "@/lib",
-    "hooks": "@/hooks"
+    "utils": "@chrono/ui/lib/utils",
+    "ui": "@chrono/ui/components"
   },
-  "menuColor": "default",
-  "menuAccent": "subtle",
-  "registries": {}
+  "registries": {
+    "@8starlabs-ui": "https://ui.8starlabs.com/r/{name}.json",
+    "@coss": "https://coss.com/ui/r/{name}.json",
+    "@efferd": "https://efferd.com/r/{name}.json",
+    "@formcn": "https://formcn.dev/r/{name}.json",
+    "@hextaui": "https://hextaui.com/r/{name}.json",
+    "@motion-primitives": "https://motion-primitives.com/c/{name}.json",
+    "@lucide-animated": "https://lucide-animated.com/r/{name}.json"
+  }
 }

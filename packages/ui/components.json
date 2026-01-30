@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "base-lyra",
-  "rsc": true,
+  "rsc": false,
   "tsx": true,
   "tailwind": {
     "config": "",
@@ -14,7 +14,19 @@
   "aliases": {
     "components": "@chrono/ui/components",
     "utils": "@chrono/ui/lib/utils",
+    "ui": "@chrono/ui/components",
     "lib": "@chrono/ui/lib",
-    "ui": "@chrono/ui/components"
+    "hooks": "@chrono/ui/hooks"
+  },
+  "menuColor": "inverted",
+  "menuAccent": "bold",
+  "registries": {
+    "@8starlabs-ui": "https://ui.8starlabs.com/r/{name}.json",
+    "@coss": "https://coss.com/ui/r/{name}.json",
+    "@efferd": "https://efferd.com/r/{name}.json",
+    "@formcn": "https://formcn.dev/r/{name}.json",
+    "@hextaui": "https://hextaui.com/r/{name}.json",
+    "@motion-primitives": "https://motion-primitives.com/c/{name}.json",
+    "@lucide-animated": "https://lucide-animated.com/r/{name}.json"
   }
 }
