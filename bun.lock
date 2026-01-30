@@ -128,6 +128,17 @@
         "typescript": "catalog:",
       },
     },
+    "packages/types": {
+      "name": "@chrono/types",
+      "version": "0.0.0",
+      "dependencies": {
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@chrono/config": "workspace:*",
+        "typescript": "catalog:",
+      },
+    },
   },
   "catalog": {
     "@orpc/client": "^1.12.2",
@@ -242,6 +253,8 @@
     "@chrono/db": ["@chrono/db@workspace:packages/db"],
 
     "@chrono/env": ["@chrono/env@workspace:packages/env"],
+
+    "@chrono/types": ["@chrono/types@workspace:packages/types"],
 
     "@clack/core": ["@clack/core@0.5.0", "", { "dependencies": { "picocolors": "^1.0.0", "sisteransi": "^1.0.5" } }, "sha512-p3y0FIOwaYRUPRcMO7+dlmLh8PSRcrjuTndsiA0WAFbWES0mLZlrjVoBRZ9DzkPFJZG6KGkJmoEAY0ZcVWTkow=="],
 

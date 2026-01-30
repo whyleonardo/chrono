@@ -1,0 +1,22 @@
+{
+  "name": "@chrono/types",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": {
+      "types": "./src/*.d.ts",
+      "import": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@chrono/config": "workspace:*",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "zod": "catalog:"
+  }
+}
