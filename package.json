@@ -34,7 +34,10 @@
     "db:stop": "turbo -F @chrono/db db:stop",
     "db:down": "turbo -F @chrono/db db:down",
     "check": "ultracite check",
-    "fix": "ultracite fix"
+    "fix": "ultracite fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@chrono/env": "workspace:*",
@@ -54,7 +57,9 @@
     "@types/node": "^22.13.14",
     "turbo": "^2.6.3",
     "typescript": "catalog:",
-    "ultracite": "7.1.1"
+    "ultracite": "7.1.1",
+    "@vitest/ui": "^3.0.0",
+    "vitest": "^3.0.0"
   },
   "packageManager": "bun@1.3.6"
 }
