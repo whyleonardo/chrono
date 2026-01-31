@@ -35,9 +35,10 @@
     "db:down": "turbo -F @chrono/db db:down",
     "check": "ultracite check",
     "fix": "ultracite fix",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test": "NODE_ENV=test vitest run",
+    "test:watch": "NODE_ENV=test vitest",
+    "test:ui": "NODE_ENV=test vitest --ui",
+    "test:unit": "NODE_ENV=test vitest run packages/api/src/utils"
   },
   "dependencies": {
     "@chrono/env": "workspace:*",
