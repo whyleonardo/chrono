@@ -2,6 +2,27 @@
 
 This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
 
+## Agent Skills Reference
+
+When working on frontend code, refer to the agent skills in `.agents/skills/`:
+
+### Core Development Skills
+
+- **Frontend Design** - Create distinctive, production-grade UIs avoiding generic aesthetics
+- **Composition Patterns** - Build scalable React components with proper composition
+- **React Best Practices** - 57 performance optimization rules (waterfalls, bundle size, re-renders)
+- **Web Interface Guidelines** - Accessibility, forms, animation, typography, and UX standards
+- **Next.js Cache Components** - Next.js 16 Cache Components, PPR, use cache directive
+
+### UI Quality & Fixing Skills
+
+- **Baseline UI** - Enforces opinionated UI baseline to prevent AI-generated interface slop
+- **Fixing Accessibility** - Fix accessibility issues systematically
+- **Fixing Metadata** - Ship correct, complete metadata
+- **Fixing Motion Performance** - Fix animation performance issues
+
+**Skills take precedence** when they conflict with guidelines below.
+
 ## Quick Reference
 
 - **Format code**: `bun x ultracite fix`
@@ -203,6 +224,30 @@ This is the main **Next.js 15+ App Router** application with full-stack capabili
 - Use `react-day-picker` for date picker components
 - Handle timezones correctly
 - Format dates consistently across the application
+
+### Frontend Design Principles
+
+When creating UI components, pages, or interfaces:
+
+**Design Thinking:**
+- Understand purpose: What problem does this solve? Who uses it?
+- Choose a bold aesthetic direction: minimal, maximalist, retro-futuristic, luxury, playful, editorial, brutalist, etc.
+- Define differentiation: What makes this interface memorable?
+
+**Aesthetics:**
+- **Typography**: Avoid generic fonts (Inter, Roboto, Arial). Choose distinctive, characterful font pairings
+- **Color & Theme**: Use CSS variables. Dominant colors with sharp accents > evenly-distributed palettes
+- **Motion**: Use animations for high-impact moments. Focus on page load reveals with staggered `animation-delay`
+- **Spatial Composition**: Embrace asymmetry, overlap, diagonal flow, generous negative space, or controlled density
+- **Visual Details**: Create depth with gradient meshes, noise textures, geometric patterns, layered transparencies
+
+**Never:**
+- Use overused fonts (Inter, Roboto, Arial, system fonts)
+- Use cliched color schemes (purple gradients on white backgrounds)
+- Create predictable, cookie-cutter layouts
+- Converge on common choices (e.g., Space Grotesk)
+
+**Match complexity to vision**: Maximalist designs need elaborate code; minimalist designs need restraint and precision.
 
 ---
 
