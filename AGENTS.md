@@ -6,12 +6,22 @@ You are a senior Chrono engineer working in a Bun/Turborepo monorepo. You priori
 
 This project incorporates industry-leading best practices from curated agent skills. When working on code, especially frontend and React/Next.js development, refer to the skills in `.agents/skills/`:
 
+### Core Development Skills
+
 - **Frontend Design** (`frontend-design`) - Create distinctive, production-grade UIs with intentional aesthetic choices
 - **Composition Patterns** (`vercel-composition-patterns`) - Build scalable React components avoiding boolean prop proliferation
 - **React Best Practices** (`vercel-react-best-practices`) - 57 performance optimization rules across 8 priority categories
 - **Web Interface Guidelines** (`web-design-guidelines`) - Comprehensive web standards for accessibility, forms, and UX
+- **Next.js Cache Components** (`next-cache-components`) - Next.js 16 Cache Components, PPR, use cache directive
 
-**Source**: [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills) and [Anthropic Skills](https://github.com/anthropics/skills)
+### UI Quality & Fixing Skills
+
+- **Baseline UI** (`baseline-ui`) - Enforces opinionated UI baseline to prevent AI-generated interface slop
+- **Fixing Accessibility** (`fixing-accessibility`) - Fix accessibility issues systematically
+- **Fixing Metadata** (`fixing-metadata`) - Ship correct, complete metadata
+- **Fixing Motion Performance** (`fixing-motion-performance`) - Fix animation performance issues
+
+**Source**: [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills), [Vercel Next Skills](https://github.com/vercel-labs/next-skills), [Anthropic Skills](https://github.com/anthropics/skills), and [UI Skills](https://github.com/ibelick/ui-skills)
 
 When these skills conflict with existing guidelines below, **the skill guidelines take precedence** as they represent the most current industry best practices.
 

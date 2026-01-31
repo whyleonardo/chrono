@@ -6,10 +6,20 @@ This project uses **Ultracite**, a zero-config preset that enforces strict code 
 
 When working on UI components, refer to the agent skills in `.agents/skills/`:
 
+### Core Development Skills
+
 - **Frontend Design** - Create distinctive, production-grade UIs with bold aesthetic choices
 - **Composition Patterns** - Avoid boolean prop proliferation; use compound components
 - **React Best Practices** - Performance optimization for re-renders, bundle size, and rendering
 - **Web Interface Guidelines** - Comprehensive accessibility, forms, and interaction standards
+- **Next.js Cache Components** - Next.js 16 Cache Components and PPR
+
+### UI Quality & Fixing Skills
+
+- **Baseline UI** - Enforces opinionated UI baseline to prevent AI-generated interface slop
+- **Fixing Accessibility** - Fix accessibility issues systematically
+- **Fixing Metadata** - Ship correct, complete metadata
+- **Fixing Motion Performance** - Fix animation performance issues
 
 **Skills take precedence** when they conflict with guidelines below.
 
