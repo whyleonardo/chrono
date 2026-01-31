@@ -252,10 +252,14 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>;
 
 ### Testing Types
 
+**Test Framework:** Vitest
+
+- Import test utilities from `vitest` (`describe`, `it`, `expect`)
 - Use TypeScript's type system for type tests
 - Verify type inference works correctly
 - Test Zod schema validation
 - Ensure schema and type stay in sync
+- Run tests with: `vitest run`
 
 ---
 

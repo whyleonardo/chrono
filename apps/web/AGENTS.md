@@ -126,10 +126,15 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 ## Testing
 
+**Test Framework:** Vitest with React Testing Library
+
+- Import test utilities from `vitest` (`describe`, `it`, `expect`, `beforeAll`, `afterAll`)
 - Write assertions inside `it()` or `test()` blocks
 - Avoid done callbacks in async tests - use async/await instead
 - Don't use `.only` or `.skip` in committed code
 - Keep test suites reasonably flat - avoid excessive `describe` nesting
+- Use React Testing Library for component testing
+- Run tests with: `vitest run`
 
 ## When Biome Can't Help
 

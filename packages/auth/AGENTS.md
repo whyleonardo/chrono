@@ -203,11 +203,15 @@ This package handles **authentication configuration and logic** using Better-Aut
 
 ### Testing
 
+**Test Framework:** Vitest
+
+- Import test utilities from `vitest` (`describe`, `it`, `expect`, `beforeAll`, `afterAll`)
 - Test all authentication flows (signup, login, logout)
 - Test password reset and email verification
 - Test OAuth flows with mock providers
 - Test session management and expiration
 - Test security edge cases (timing attacks, brute force)
+- Run tests with: `vitest run`
 
 ---
 

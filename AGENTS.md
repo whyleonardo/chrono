@@ -124,6 +124,10 @@ bun run check            # Check for issues
 # Type checking
 bun run check-types      # Type check all packages
 
+# Testing
+vitest run               # Run all tests once
+vitest                   # Run tests in watch mode
+
 # Build
 bun run build            # Build all packages
 ```
@@ -146,6 +150,7 @@ bun remove <package> --workspace-name <workspace>
 ### Always do
 - Run `bun run check-types` before committing
 - Run `bun run fix` before pushing (Biome formatting)
+- Run `vitest run` before pushing to ensure tests pass
 - Use Zod schemas for all external input validation
 - Follow conventional commits for PR titles
 - Use Server Components for data fetching in Next.js
@@ -162,7 +167,7 @@ bun remove <package> --workspace-name <workspace>
 - Use `as any` type casting
 - Force push or rebase shared branches
 - Modify generated migration files after creation
-- Skip type checking or linting
+- Skip type checking, linting, or testing
 
 ## Project Structure
 
@@ -208,6 +213,7 @@ packages/
 - **Validation**: Zod
 - **State Management**: TanStack Query
 - **Forms**: TanStack Form
+- **Testing**: Vitest
 - **Monorepo**: Turborepo
 - **Linting**: Biome (via Ultracite)
 
@@ -287,7 +293,7 @@ const dbUrl = process.env.DATABASE_URL; // Could be undefined
 - [ ] Title follows conventional commits: `feat(scope): description`
 - [ ] Type check passes: `bun run check-types`
 - [ ] Lint passes: `bun run check`
-- [ ] Relevant tests pass (if tests exist)
+- [ ] Tests pass: `vitest run`
 - [ ] Diff is small and focused (<500 lines, <10 files)
 - [ ] No secrets or API keys committed
 - [ ] Created as draft PR

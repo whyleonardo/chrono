@@ -342,12 +342,16 @@ const buttonVariants = cva("base-classes", {
 
 ### Testing Components
 
+**Test Framework:** Vitest with React Testing Library
+
+- Import test utilities from `vitest` (`describe`, `it`, `expect`, `beforeAll`, `afterAll`)
 - Test component rendering
 - Test user interactions
 - Test accessibility
 - Test different variants
 - Test edge cases and error states
 - Use React Testing Library patterns
+- Run tests with: `vitest run`
 
 ### Performance Considerations
 

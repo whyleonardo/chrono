@@ -227,10 +227,14 @@ const dbUrl = process.env.DATABASE_URL; // Could be undefined
 
 ### Testing
 
+**Test Framework:** Vitest
+
+- Import test utilities from `vitest` (`describe`, `it`, `expect`)
 - Mock environment variables in tests
 - Test validation logic for edge cases
 - Ensure required variables cause build failures
 - Test default values work correctly
+- Run tests with: `vitest run`
 
 ---
 

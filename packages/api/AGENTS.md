@@ -189,13 +189,17 @@ This package contains the **API layer and business logic** using ORPC for type-s
 - Log errors with sufficient context for troubleshooting
 - Use proper error status codes
 
-### Testing Considerations
+### Testing
 
-- Write tests for each API procedure
+**Test Framework:** Vitest
+
+- Write tests for each API procedure using Vitest
+- Import test utilities from `vitest` (`describe`, `it`, `expect`, `beforeAll`, `afterAll`)
 - Test both success and failure cases
 - Validate schema validation is working
 - Test authentication/authorization logic
 - Mock external dependencies
+- Run tests with: `vitest run`
 
 ---
 

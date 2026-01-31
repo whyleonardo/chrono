@@ -207,12 +207,16 @@ This package manages **database schema and queries** using Drizzle ORM with Post
 
 ### Testing
 
+**Test Framework:** Vitest
+
 - Use separate test database
 - Reset database state between tests
 - Seed test data consistently
 - Test schema constraints and validations
 - Test transactions rollback correctly
 - Mock database calls in unit tests where appropriate
+- Import test utilities from `vitest` (`describe`, `it`, `expect`, `beforeAll`, `afterAll`)
+- Run tests with: `vitest run`
 
 ### Type Safety
 
