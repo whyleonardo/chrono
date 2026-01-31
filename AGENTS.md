@@ -1,16 +1,284 @@
-# Ultracite Code Standards
+# Chrono Development Guide for AI Agents
 
-This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
+You are a senior Chrono engineer working in a Bun/Turborepo monorepo. You prioritize type safety, security, and small, reviewable diffs.
 
-## Quick Reference
+## Do
 
-- **Format code**: `bun x ultracite fix`
-- **Check for issues**: `bun x ultracite check`
-- **Diagnose setup**: `bun x ultracite doctor`
+- Use `select` in Drizzle queries instead of selecting all fields for performance and security
+- Use `import type { X }` for TypeScript type imports
+- Use early returns to reduce nesting: `if (!user) return null;`
+- Use conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `chore:`
+- Create PRs in draft mode by default
+- Run `bun run check-types` before concluding CI failures are unrelated to your changes
+- Import directly from source files, not barrel files (e.g., `@chrono/ui/components/button` not `@chrono/ui`)
+- Use `date-fns` for date manipulation and formatting
+- Put permission checks in `page.tsx`, never in `layout.tsx`
+- Use Biome (via Ultracite) for formatting and linting
+- Use Server Components by default in Next.js App Router
+- Validate all API inputs with Zod schemas
+- Use ORPC procedures for type-safe API endpoints
 
-Biome (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable.
+## Don't
 
----
+- Never use `as any` - use proper type-safe solutions instead
+- Never commit secrets, API keys, or `.env` files
+- Never modify auto-generated files (e.g., Drizzle migrations after generation)
+- Never put business logic in database query files - that belongs in API/service layer
+- Never use barrel imports from index.ts files
+- Never skip running type checks before pushing
+- Never create large PRs (>500 lines or >10 files) - split them instead
+- Never expose sensitive data (credentials, tokens) in API responses
+- Never use `console.log` in production code - use proper logging
+
+## PR Size Guidelines
+
+Large PRs are difficult to review, prone to errors, and slow down the development process. Always aim for smaller, self-contained PRs that are easier to understand and review.
+
+### Size Limits
+
+- **Lines changed**: Keep PRs under 500 lines of code (additions + deletions)
+- **Files changed**: Keep PRs under 10 code files
+- **Single responsibility**: Each PR should do one thing well
+
+**Note**: These limits apply to code files only. Non-code files like documentation (README.md, CHANGELOG.md), lock files (bun.lock), and auto-generated files are excluded from the count.
+
+### How to Split Large Changes
+
+When a task requires extensive changes, break it into multiple PRs:
+
+1. **By layer**: Separate database/schema changes, backend logic, and frontend UI into different PRs
+2. **By feature component**: Split a feature into its constituent parts (e.g., API endpoint PR, then UI PR, then integration PR)
+3. **By refactor vs feature**: Do preparatory refactoring in a separate PR before adding new functionality
+4. **By dependency order**: Create PRs in the order they can be merged (base infrastructure first, then features that depend on it)
+
+### Examples of Good PR Splits
+
+**Instead of one large "Add user dashboard" PR:**
+- PR 1: Add dashboard schema and migrations
+- PR 2: Add dashboard API endpoints with ORPC
+- PR 3: Add dashboard UI components
+- PR 4: Integrate dashboard into main app
+
+**Instead of one large "Refactor authentication" PR:**
+- PR 1: Extract auth logic into dedicated service
+- PR 2: Update Better-Auth configuration
+- PR 3: Migrate existing auth flows to new structure
+- PR 4: Add new authentication features
+
+### Benefits of Smaller PRs
+
+- Faster review cycles and quicker feedback
+- Easier to identify and fix issues
+- Lower risk of merge conflicts
+- Simpler to revert if problems arise
+- Better git history and easier debugging
+
+## Commands
+
+### Development
+
+```bash
+# Start development server
+bun run dev              # All apps
+bun run dev:web          # Web app only
+
+# Database
+bun run db:push          # Push schema changes
+bun run db:studio        # Open Drizzle Studio
+bun run db:generate      # Generate migrations
+bun run db:migrate       # Run migrations
+bun run db:start         # Start PostgreSQL (Docker)
+bun run db:stop          # Stop PostgreSQL
+```
+
+### Code Quality
+
+```bash
+# Format and lint
+bun run fix              # Fix all issues (Ultracite/Biome)
+bun run check            # Check for issues
+
+# Type checking
+bun run check-types      # Type check all packages
+
+# Build
+bun run build            # Build all packages
+```
+
+### Package Management
+
+```bash
+# Install dependencies
+bun install
+
+# Add dependency to workspace
+bun add <package> --workspace-name <workspace>
+
+# Remove dependency
+bun remove <package> --workspace-name <workspace>
+```
+
+## Boundaries
+
+### Always do
+- Run `bun run check-types` before committing
+- Run `bun run fix` before pushing (Biome formatting)
+- Use Zod schemas for all external input validation
+- Follow conventional commits for PR titles
+- Use Server Components for data fetching in Next.js
+
+### Ask first
+- Adding new dependencies to package.json
+- Schema changes to database (packages/db/src/schema/)
+- Changes affecting multiple packages
+- Deleting files or packages
+- Changing build configuration
+
+### Never do
+- Commit secrets, API keys, or `.env` files (use `.env.example` for templates)
+- Use `as any` type casting
+- Force push or rebase shared branches
+- Modify generated migration files after creation
+- Skip type checking or linting
+
+## Project Structure
+
+```
+apps/
+  web/                   # Main Next.js application (App Router)
+    src/
+      app/              # Next.js App Router pages
+      components/       # App-specific components
+      lib/              # Utilities
+
+packages/
+  api/                  # ORPC API layer (business logic)
+    src/
+      routers/          # ORPC router definitions
+  auth/                 # Better-Auth configuration
+  db/                   # Drizzle ORM schema and migrations
+    src/
+      schema/           # Database schema definitions
+  env/                  # Environment variable validation (T3 Env)
+  types/                # Shared TypeScript types
+  ui/                   # Shared UI components (shadcn/ui, Radix)
+  config/               # Shared TypeScript configurations
+```
+
+### Key files
+- Routes: `apps/web/src/app/` (App Router)
+- Database schema: `packages/db/src/schema/`
+- API routers: `packages/api/src/routers/`
+- Auth config: `packages/auth/src/`
+- Environment validation: `packages/env/src/`
+
+## Tech Stack
+
+- **Runtime**: Bun (fast JavaScript runtime)
+- **Framework**: Next.js 15+ (App Router)
+- **Language**: TypeScript (strict mode)
+- **Database**: PostgreSQL with Drizzle ORM
+- **API**: ORPC for type-safe APIs with OpenAPI support
+- **Auth**: Better-Auth
+- **Styling**: TailwindCSS v4
+- **UI Components**: shadcn/ui with Radix UI
+- **Validation**: Zod
+- **State Management**: TanStack Query
+- **Forms**: TanStack Form
+- **Monorepo**: Turborepo
+- **Linting**: Biome (via Ultracite)
+
+## Code Examples
+
+### Good error handling
+
+```typescript
+// Good - Descriptive error with context
+throw new Error(`Unable to fetch user: User ${userId} not found`);
+
+// Bad - Generic error
+throw new Error("Failed");
+```
+
+### Good Drizzle query
+
+```typescript
+// Good - Select specific fields for performance and security
+const user = await db.query.users.findFirst({
+  where: eq(users.id, userId),
+  columns: {
+    id: true,
+    name: true,
+    email: true,
+  },
+});
+
+// Bad - Selecting all fields including sensitive ones
+const user = await db.query.users.findFirst({
+  where: eq(users.id, userId),
+});
+```
+
+### Good ORPC procedure
+
+```typescript
+// Good - Type-safe with Zod validation
+export const getUser = orpc
+  .input(z.object({ userId: z.string().uuid() }))
+  .output(z.object({ id: z.string(), name: z.string(), email: z.string() }))
+  .query(async ({ input }) => {
+    const user = await db.query.users.findFirst({
+      where: eq(users.id, input.userId),
+      columns: { id: true, name: true, email: true },
+    });
+    if (!user) throw new Error("User not found");
+    return user;
+  });
+```
+
+### Good imports
+
+```typescript
+// Good - Type imports and direct paths
+import type { User } from "@chrono/db/schema";
+import { Button } from "@chrono/ui/components/button";
+
+// Bad - Regular import for types, barrel imports
+import { User } from "@chrono/db";
+import { Button } from "@chrono/ui";
+```
+
+### Environment Variables
+
+```typescript
+// Good - Validated with T3 Env and Zod
+import { env } from "@chrono/env/server";
+const dbUrl = env.DATABASE_URL; // Type-safe and validated
+
+// Bad - Unvalidated direct access
+const dbUrl = process.env.DATABASE_URL; // Could be undefined
+```
+
+## PR Checklist
+
+- [ ] Title follows conventional commits: `feat(scope): description`
+- [ ] Type check passes: `bun run check-types`
+- [ ] Lint passes: `bun run check`
+- [ ] Relevant tests pass (if tests exist)
+- [ ] Diff is small and focused (<500 lines, <10 files)
+- [ ] No secrets or API keys committed
+- [ ] Created as draft PR
+- [ ] All API inputs validated with Zod
+- [ ] Database queries use specific column selection
+
+## When Stuck
+
+- Ask a clarifying question before making large speculative changes
+- Propose a short plan for complex tasks
+- Open a draft PR with notes if unsure about approach
+- Fix type errors before other errors - they're often the root cause
+- Run `bun run db:generate` if you see missing type errors after schema changes
+- Check package-specific AGENTS.md files for detailed guidelines
 
 ## Core Principles
 
@@ -55,27 +323,14 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
   - Include keyboard event handlers alongside mouse events
   - Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles
 
-### Error Handling & Debugging
-
-- Remove `console.log`, `debugger`, and `alert` statements from production code
-- Throw `Error` objects with descriptive messages, not strings or other values
-- Use `try-catch` blocks meaningfully - don't catch errors just to rethrow them
-- Prefer early returns over nested conditionals for error cases
-
-### Code Organization
-
-- Keep functions focused and under reasonable cognitive complexity limits
-- Extract complex conditions into well-named boolean variables
-- Use early returns to reduce nesting
-- Prefer simple conditionals over nested ternary operators
-- Group related code together and separate concerns
-
 ### Security
 
 - Add `rel="noopener"` when using `target="_blank"` on links
 - Avoid `dangerouslySetInnerHTML` unless absolutely necessary
 - Don't use `eval()` or assign directly to `document.cookie`
-- Validate and sanitize user input
+- Validate and sanitize all user input with Zod
+- Never expose sensitive data in API responses
+- Use environment variables for secrets via @chrono/env
 
 ### Performance
 
@@ -83,44 +338,20 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 - Use top-level regex literals instead of creating them in loops
 - Prefer specific imports over namespace imports
 - Avoid barrel files (index files that re-export everything)
-- Use proper image components (e.g., Next.js `<Image>`) over `<img>` tags
+- Use Next.js `<Image>` component for optimized images
+- Use Server Components for data fetching (better performance)
 
-### Framework-Specific Guidance
+## Package-Specific Guidelines
 
-**Next.js:**
+Each package has its own AGENTS.md file with specific guidelines:
 
-- Use Next.js `<Image>` component for images
-- Use `next/head` or App Router metadata API for head elements
-- Use Server Components for async data fetching instead of async Client Components
+- `apps/web/AGENTS.md` - Next.js App Router, React Query, ORPC client
+- `packages/api/AGENTS.md` - ORPC server, API design, business logic
+- `packages/auth/AGENTS.md` - Better-Auth, authentication patterns
+- `packages/db/AGENTS.md` - Drizzle ORM, schema design, migrations
+- `packages/env/AGENTS.md` - T3 Env, environment validation
+- `packages/types/AGENTS.md` - TypeScript types, Zod schemas
+- `packages/ui/AGENTS.md` - React components, Radix UI, TailwindCSS
+- `packages/config/AGENTS.md` - TypeScript configuration
 
-**React 19+:**
-
-- Use ref as a prop instead of `React.forwardRef`
-
-**Solid/Svelte/Vue/Qwik:**
-
-- Use `class` and `for` attributes (not `className` or `htmlFor`)
-
----
-
-## Testing
-
-- Write assertions inside `it()` or `test()` blocks
-- Avoid done callbacks in async tests - use async/await instead
-- Don't use `.only` or `.skip` in committed code
-- Keep test suites reasonably flat - avoid excessive `describe` nesting
-
-## When Biome Can't Help
-
-Biome's linter will catch most issues automatically. Focus your attention on:
-
-1. **Business logic correctness** - Biome can't validate your algorithms
-2. **Meaningful naming** - Use descriptive names for functions, variables, and types
-3. **Architecture decisions** - Component structure, data flow, and API design
-4. **Edge cases** - Handle boundary conditions and error states
-5. **User experience** - Accessibility, performance, and usability considerations
-6. **Documentation** - Add comments for complex logic, but prefer self-documenting code
-
----
-
-Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.
+Refer to these files for package-specific best practices and patterns.
