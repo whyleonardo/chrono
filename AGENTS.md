@@ -4,12 +4,12 @@ You are a senior Chrono engineer working in a Bun/Turborepo monorepo. You priori
 
 ## Agent Skills Reference
 
-This project incorporates industry-leading best practices from curated agent skills. When working on code, especially frontend and React/Next.js development, refer to the skills in `.opencode/skills/`:
+This project incorporates industry-leading best practices from curated agent skills. When working on code, especially frontend and React/Next.js development, refer to the skills in `.agents/skills/`:
 
-- **Frontend Design** (`anthropic-frontend-design.md`) - Create distinctive, production-grade UIs with intentional aesthetic choices
-- **Composition Patterns** (`vercel-composition-patterns.md`) - Build scalable React components avoiding boolean prop proliferation
-- **React Best Practices** (`vercel-react-best-practices.md`) - 57 performance optimization rules across 8 priority categories
-- **Web Interface Guidelines** (`vercel-web-design-guidelines.md`) - Comprehensive web standards for accessibility, forms, and UX
+- **Frontend Design** (`frontend-design`) - Create distinctive, production-grade UIs with intentional aesthetic choices
+- **Composition Patterns** (`vercel-composition-patterns`) - Build scalable React components avoiding boolean prop proliferation
+- **React Best Practices** (`vercel-react-best-practices`) - 57 performance optimization rules across 8 priority categories
+- **Web Interface Guidelines** (`web-design-guidelines`) - Comprehensive web standards for accessibility, forms, and UX
 
 **Source**: [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills) and [Anthropic Skills](https://github.com/anthropics/skills)
 

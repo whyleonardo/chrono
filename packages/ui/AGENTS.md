@@ -4,7 +4,7 @@ This project uses **Ultracite**, a zero-config preset that enforces strict code 
 
 ## Agent Skills Reference
 
-When working on UI components, refer to the agent skills in `.opencode/skills/`:
+When working on UI components, refer to the agent skills in `.agents/skills/`:
 
 - **Frontend Design** - Create distinctive, production-grade UIs with bold aesthetic choices
 - **Composition Patterns** - Avoid boolean prop proliferation; use compound components
