@@ -2,6 +2,19 @@
 
 You are a senior Chrono engineer working in a Bun/Turborepo monorepo. You prioritize type safety, security, and small, reviewable diffs.
 
+## Agent Skills Reference
+
+This project incorporates industry-leading best practices from curated agent skills. When working on code, especially frontend and React/Next.js development, refer to the skills in `.opencode/skills/`:
+
+- **Frontend Design** (`anthropic-frontend-design.md`) - Create distinctive, production-grade UIs with intentional aesthetic choices
+- **Composition Patterns** (`vercel-composition-patterns.md`) - Build scalable React components avoiding boolean prop proliferation
+- **React Best Practices** (`vercel-react-best-practices.md`) - 57 performance optimization rules across 8 priority categories
+- **Web Interface Guidelines** (`vercel-web-design-guidelines.md`) - Comprehensive web standards for accessibility, forms, and UX
+
+**Source**: [Vercel Agent Skills](https://github.com/vercel-labs/agent-skills) and [Anthropic Skills](https://github.com/anthropics/skills)
+
+When these skills conflict with existing guidelines below, **the skill guidelines take precedence** as they represent the most current industry best practices.
+
 ## Do
 
 - Use `select` in Drizzle queries instead of selecting all fields for performance and security
@@ -310,18 +323,53 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 ### React & JSX
 
+**Component Architecture:**
 - Use function components over class components
+- Don't add boolean props to customize behavior; use composition patterns instead
+- Structure complex components with shared context (compound components)
+- Create explicit variant components instead of boolean modes
+- Don't define components inside other components
+
+**Hooks & State:**
 - Call hooks at the top level only, never conditionally
 - Specify all dependencies in hook dependency arrays correctly
+- Use primitive dependencies in effects (not objects/arrays)
+- Use functional setState for stable callbacks
+- Use refs for transient, frequently-changing values
+
+**JSX & Rendering:**
 - Use the `key` prop for elements in iterables (prefer unique IDs over array indices)
 - Nest children between opening and closing tags instead of passing as props
-- Don't define components inside other components
-- Use semantic HTML and ARIA attributes for accessibility:
-  - Provide meaningful alt text for images
-  - Use proper heading hierarchy
-  - Add labels for form inputs
-  - Include keyboard event handlers alongside mouse events
-  - Use semantic elements (`<button>`, `<nav>`, etc.) instead of divs with roles
+- Use ternary operators for conditionals, not `&&` (avoids rendering `0`)
+- Hoist static JSX outside components for better performance
+
+**Accessibility (Web Interface Guidelines):**
+- Use semantic HTML (`<button>`, `<a>`, `<label>`, `<nav>`) before ARIA
+- Icon-only buttons need `aria-label`
+- Form controls need `<label>` or `aria-label`
+- Interactive elements need keyboard handlers (`onKeyDown`/`onKeyUp`)
+- Images need `alt` (or `alt=""` if decorative)
+- Decorative icons need `aria-hidden="true"`
+- Use `<button>` for actions, `<a>`/`<Link>` for navigation (not `<div onClick>`)
+- Headings hierarchical `<h1>`–`<h6>`; include skip link for main content
+
+**Focus States:**
+- Interactive elements need visible focus: `focus-visible:ring-*` or equivalent
+- Never `outline-none` without focus replacement
+- Use `:focus-visible` over `:focus` (avoid focus ring on click)
+
+**Forms:**
+- Inputs need `autocomplete` and meaningful `name`
+- Use correct `type` (`email`, `tel`, `url`, `number`) and `inputmode`
+- Never block paste (`onPaste` + `preventDefault`)
+- Labels clickable (`htmlFor` or wrapping control)
+- Errors inline next to fields; focus first error on submit
+- Placeholders end with `…` and show example pattern
+
+**Animation:**
+- Honor `prefers-reduced-motion` (provide reduced variant or disable)
+- Animate `transform`/`opacity` only (compositor-friendly)
+- Never `transition: all`—list properties explicitly
 
 ### Security
 
@@ -334,12 +382,29 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 
 ### Performance
 
+**Critical Priority:**
+- **Eliminate waterfalls**: Use `Promise.all()` for independent async operations; move `await` into branches where actually used
+- **Avoid barrel imports**: Import directly from source files (e.g., `@chrono/ui/components/button` not `@chrono/ui`)
+- **Use dynamic imports**: Lazy load heavy components with `next/dynamic`
+- **Defer third-party scripts**: Load analytics/logging after hydration
+
+**High Priority:**
+- Use `React.cache()` for per-request deduplication in Server Components
+- Minimize data passed to Client Components (serialization cost)
+- Restructure components to parallelize data fetching
+- Use Server Components for data fetching (better performance)
+
+**Medium Priority:**
+- Extract expensive work into memoized components with `React.memo`
+- Use `startTransition` for non-urgent updates
+- Virtualize long lists (>50 items) with `content-visibility: auto` or virtualization libraries
+- Use Next.js `<Image>` component for optimized images
+
+**General:**
 - Avoid spread syntax in accumulators within loops
 - Use top-level regex literals instead of creating them in loops
-- Prefer specific imports over namespace imports
-- Avoid barrel files (index files that re-export everything)
-- Use Next.js `<Image>` component for optimized images
-- Use Server Components for data fetching (better performance)
+- Cache repeated property access in loops with variables
+- Use `Set`/`Map` for O(1) lookups instead of array methods
 
 ## Package-Specific Guidelines
 

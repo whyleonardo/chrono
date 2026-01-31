@@ -2,6 +2,17 @@
 
 This project uses **Ultracite**, a zero-config preset that enforces strict code quality standards through automated formatting and linting.
 
+## Agent Skills Reference
+
+When working on UI components, refer to the agent skills in `.opencode/skills/`:
+
+- **Frontend Design** - Create distinctive, production-grade UIs with bold aesthetic choices
+- **Composition Patterns** - Avoid boolean prop proliferation; use compound components
+- **React Best Practices** - Performance optimization for re-renders, bundle size, and rendering
+- **Web Interface Guidelines** - Comprehensive accessibility, forms, and interaction standards
+
+**Skills take precedence** when they conflict with guidelines below.
+
 ## Quick Reference
 
 - **Format code**: `bun x ultracite fix`
@@ -145,6 +156,14 @@ This package is a **shared UI component library** using React, Radix UI, and Tai
 
 ### Component Library Best Practices
 
+**Composition Over Configuration:**
+- Avoid boolean props for customization; use composition patterns instead
+- Create explicit variant components (e.g., `<PrimaryButton>`, `<DangerButton>`) over `<Button variant="primary">`
+- Use compound components for complex UI (e.g., `<Tabs><Tab /></Tabs>`)
+- Use children for flexibility instead of render props
+- Lift state into provider components for sibling access
+
+**Component Design:**
 - Create reusable, composable components
 - Follow single responsibility principle
 - Make components controllable and uncontrolled
@@ -152,6 +171,11 @@ This package is a **shared UI component library** using React, Radix UI, and Tai
 - Support ref forwarding for direct DOM access
 - Export component types for TypeScript users
 - Use compound component patterns where appropriate
+
+**State Management:**
+- Provider is the only place that knows how state is managed
+- Define generic interface with state, actions, metadata for dependency injection
+- Decouple state implementation from component interface
 
 ### Radix UI Integration
 
@@ -202,14 +226,44 @@ const buttonVariants = cva("base-classes", {
 
 ### Accessibility Requirements
 
+**Essential (Web Interface Guidelines):**
 - All interactive elements must be keyboard accessible
+- Icon-only buttons need `aria-label`
+- Form controls need `<label>` or `aria-label`
+- Use semantic HTML elements before ARIA
+- `<button>` for actions, `<a>`/`<Link>` for navigation (never `<div onClick>`)
+- Images need `alt` (or `alt=""` if decorative)
+- Decorative icons need `aria-hidden="true"`
+- Async updates (toasts, validation) need `aria-live="polite"`
+- Headings hierarchical `<h1>`–`<h6>`
+
+**Focus Management:**
+- Interactive elements need visible focus: `focus-visible:ring-*` or equivalent
+- Never `outline-none` without focus-visible replacement
+- Use `:focus-visible` over `:focus` (avoid focus ring on click)
+- Group focus with `:focus-within` for compound controls
+- Maintain focus management in modals and complex interactions
+
+**Screen Reader Support:**
 - Provide proper ARIA labels and descriptions
-- Support screen readers
-- Use semantic HTML elements
-- Maintain focus management
-- Support reduced motion preferences
-- Ensure proper color contrast
+- Support screen readers with semantic markup
 - Test with accessibility tools
+- Ensure proper color contrast
+
+### Animation & Motion
+
+**Performance (Web Interface Guidelines):**
+- Honor `prefers-reduced-motion` (provide reduced variant or disable animations)
+- Animate `transform`/`opacity` only (compositor-friendly)
+- Never `transition: all`—list properties explicitly
+- Set correct `transform-origin`
+- SVG: transforms on `<g>` wrapper with `transform-box: fill-box; transform-origin: center`
+- Animations must be interruptible—respond to user input mid-animation
+
+**Design:**
+- Focus on high-impact moments (page load with staggered reveals using `animation-delay`)
+- Use scroll-triggering and hover states that surprise
+- Support reduced motion preferences for accessibility
 
 ### Theming & Design Tokens
 
