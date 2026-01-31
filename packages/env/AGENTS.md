@@ -123,4 +123,115 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/env
+
+This package provides **environment variable validation and type safety** using T3 Env.
+
+### Key Libraries & Frameworks
+
+- **@t3-oss/env-core** - Core environment validation
+- **@t3-oss/env-nextjs** - Next.js-specific environment handling
+- **Zod** - Schema validation
+- **dotenv** - Environment file loading
+
+### T3 Env Best Practices
+
+- Define separate schemas for server and client environment variables
+- Use Zod schemas to validate environment variables at build time
+- Export typed environment objects that are safe to use
+- Use `NEXT_PUBLIC_` prefix for client-accessible variables
+- Keep sensitive credentials server-side only
+
+### Environment Variable Organization
+
+**Server Variables** (server.ts):
+- Database credentials
+- API keys and secrets
+- Authentication secrets
+- Internal service URLs
+- Server configuration
+
+**Client Variables** (web.ts):
+- Public API URLs
+- Feature flags visible to client
+- Analytics IDs
+- Public configuration
+
+### Validation Guidelines
+
+- Validate all environment variables with appropriate Zod schemas
+- Use specific validators (`.url()`, `.email()`, `.uuid()`)
+- Provide default values where appropriate
+- Make required variables explicit (no `.optional()` unless truly optional)
+- Use `.transform()` to normalize values (e.g., parse JSON)
+- Group related variables together in the schema
+
+### Security Best Practices
+
+- **Never** commit `.env` files to version control
+- Use `.env.example` to document required variables
+- Prefix client variables with `NEXT_PUBLIC_` only when necessary
+- Keep secrets in server-side environment only
+- Use different credentials for different environments
+- Rotate secrets regularly
+- Use environment-specific values (dev, staging, production)
+
+### Type Safety
+
+- Export strongly-typed environment objects
+- Use `env.DATABASE_URL` with full autocomplete and type checking
+- Catch configuration errors at build time, not runtime
+- Make TypeScript aware of all environment variables
+
+### Configuration Patterns
+
+```typescript
+// Good: Validated and typed
+import { env } from "@chrono/env/server";
+const dbUrl = env.DATABASE_URL; // Type-safe, validated
+
+// Bad: Unvalidated direct access
+const dbUrl = process.env.DATABASE_URL; // Could be undefined
+```
+
+### Error Handling
+
+- Fail fast if required environment variables are missing
+- Provide clear error messages for missing or invalid variables
+- Log configuration errors with helpful context
+- Don't start the application with invalid configuration
+
+### Development Workflow
+
+- Keep `.env.example` up to date with required variables
+- Document the purpose of each variable
+- Use `.env.local` for local overrides
+- Ensure all team members have required environment variables
+- Use different `.env` files for different environments
+
+### Common Patterns
+
+- **Database URLs**: Validate as URL with proper protocol
+- **Port Numbers**: Parse as number with reasonable bounds
+- **Feature Flags**: Use boolean with default values
+- **URLs**: Validate format and optionally check accessibility
+- **Enum Values**: Use Zod enum for limited options
+- **JSON Config**: Use Zod object schema with `.transform(JSON.parse)`
+
+### Next.js Integration
+
+- Client variables are inlined at build time
+- Server variables are only available at runtime
+- Use proper exports for server vs. client contexts
+- Understand the implications of public environment variables
+
+### Testing
+
+- Mock environment variables in tests
+- Test validation logic for edge cases
+- Ensure required variables cause build failures
+- Test default values work correctly
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

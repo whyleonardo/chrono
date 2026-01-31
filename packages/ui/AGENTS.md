@@ -123,4 +123,176 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/ui
+
+This package is a **shared UI component library** using React, Radix UI, and TailwindCSS.
+
+### Key Libraries & Frameworks
+
+- **React 19** - Component library base
+- **Radix UI** - Accessible UI primitives
+- **@base-ui/react** - Base UI components
+- **TailwindCSS v4** - Styling system
+- **class-variance-authority (CVA)** - Variant management
+- **clsx/tailwind-merge** - Class name utilities
+- **Lucide React** - Icon library
+- **date-fns** - Date utilities
+- **react-day-picker** - Date picker
+- **Recharts** - Charts and data visualization
+- **Sonner** - Toast notifications
+- **Vaul** - Drawer component
+- **cmdk** - Command menu
+
+### Component Library Best Practices
+
+- Create reusable, composable components
+- Follow single responsibility principle
+- Make components controllable and uncontrolled
+- Provide sensible defaults
+- Support ref forwarding for direct DOM access
+- Export component types for TypeScript users
+- Use compound component patterns where appropriate
+
+### Radix UI Integration
+
+- Use Radix primitives for accessible, unstyled components
+- Follow Radix's composition patterns
+- Maintain accessibility features (ARIA attributes, keyboard navigation)
+- Don't override Radix's accessibility features
+- Use Radix's asChild prop for composition
+- Follow Radix's state management patterns
+
+### shadcn/ui Patterns
+
+- Follow shadcn/ui component structure and naming
+- Keep components in `/components/ui` directory
+- Use the shadcn CLI for adding/updating components
+- Customize components through TailwindCSS classes
+- Maintain component consistency with shadcn conventions
+
+### TailwindCSS v4 Styling
+
+- Use utility-first approach
+- Create design tokens with CSS variables
+- Use `@apply` sparingly, prefer composition
+- Leverage Tailwind's color system
+- Use responsive design utilities
+- Implement dark mode with `next-themes`
+- Use `tailwind-merge` to resolve class conflicts
+- Use CVA for component variants
+
+### Component Variants with CVA
+
+- Define variants for different component states/styles
+- Use TypeScript for type-safe variants
+- Keep variant definitions colocated with components
+- Use compound variants for complex combinations
+- Make variants composable
+
+Example:
+```typescript
+const buttonVariants = cva("base-classes", {
+  variants: {
+    variant: { default: "...", destructive: "..." },
+    size: { sm: "...", md: "...", lg: "..." }
+  },
+  defaultVariants: { variant: "default", size: "md" }
+});
+```
+
+### Accessibility Requirements
+
+- All interactive elements must be keyboard accessible
+- Provide proper ARIA labels and descriptions
+- Support screen readers
+- Use semantic HTML elements
+- Maintain focus management
+- Support reduced motion preferences
+- Ensure proper color contrast
+- Test with accessibility tools
+
+### Theming & Design Tokens
+
+- Use CSS custom properties for theme values
+- Support light and dark modes
+- Use `next-themes` for theme switching
+- Define semantic color names (primary, destructive, muted, etc.)
+- Make components theme-aware
+- Use consistent spacing scale
+
+### Icon Usage (Lucide React)
+
+- Import icons individually, not the entire library
+- Use consistent icon sizes
+- Make icons customizable via props
+- Provide accessible labels for icon-only buttons
+- Use `aria-hidden` for decorative icons
+
+### Form Components
+
+- Use controlled or uncontrolled patterns consistently
+- Provide error state handling
+- Support validation feedback
+- Make forms accessible (labels, error messages)
+- Use `react-hook-form` compatible patterns
+- Support disabled states
+
+### Date Components (react-day-picker)
+
+- Use date-fns for date manipulation
+- Handle timezone considerations
+- Support localization
+- Provide accessible date pickers
+- Handle invalid date states
+
+### Data Visualization (Recharts)
+
+- Make charts responsive
+- Use consistent color schemes
+- Provide tooltips for data points
+- Support accessibility (labels, descriptions)
+- Handle loading and error states
+
+### Notification Components (Sonner)
+
+- Use toast notifications consistently
+- Provide different toast types (success, error, info)
+- Make toasts dismissible
+- Support action buttons in toasts
+- Don't overuse toasts
+
+### Component Documentation
+
+- Document component props with JSDoc
+- Provide usage examples
+- Document accessibility features
+- List keyboard shortcuts
+- Show variant examples
+
+### TypeScript Integration
+
+- Export component prop types
+- Use generic types for flexible components
+- Provide type-safe ref forwarding
+- Use discriminated unions for variant props
+
+### Testing Components
+
+- Test component rendering
+- Test user interactions
+- Test accessibility
+- Test different variants
+- Test edge cases and error states
+- Use React Testing Library patterns
+
+### Performance Considerations
+
+- Lazy load heavy components
+- Memoize expensive computations
+- Use React.memo strategically
+- Avoid unnecessary re-renders
+- Optimize bundle size (tree-shaking)
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

@@ -123,4 +123,87 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: apps/web
+
+This is the main **Next.js 15+ App Router** application with full-stack capabilities.
+
+### Key Libraries & Frameworks
+
+- **Next.js App Router** - Server/Client Components, Server Actions
+- **React 19** - Latest React with new features
+- **ORPC** - Type-safe API client and server
+- **Better-Auth** - Authentication
+- **TanStack Query** - Server state management
+- **TanStack Form** - Form state management
+- **Zod** - Schema validation
+- **TailwindCSS v4** - Styling
+- **shadcn/ui** - UI component library
+- **Radix UI** - Accessible UI primitives
+
+### Next.js App Router Best Practices
+
+- Use Server Components by default, Client Components only when needed (interactivity, hooks, browser APIs)
+- Mark Client Components with `"use client"` directive at the top of the file
+- Fetch data in Server Components using async/await, not in Client Components with useEffect
+- Use Server Actions for mutations with `"use server"` directive
+- Leverage React Server Components for better performance and smaller bundle sizes
+- Use `<Link>` from `next/link` for navigation, not `<a>` tags
+- Optimize images with `next/image` `<Image>` component
+- Use proper metadata API for SEO (generateMetadata, metadata object)
+
+### ORPC Guidelines
+
+- Define type-safe API endpoints using ORPC schemas
+- Use ORPC client hooks with TanStack Query for data fetching
+- Leverage automatic type inference between client and server
+- Handle errors consistently using ORPC error types
+- Use Zod schemas for request/response validation
+
+### Authentication (Better-Auth)
+
+- Use Better-Auth hooks and utilities for authentication state
+- Protect routes with proper authentication middleware
+- Handle session management according to Better-Auth patterns
+- Secure API routes with authentication checks
+
+### TanStack Query Best Practices
+
+- Use query keys consistently and hierarchically
+- Implement proper cache invalidation strategies
+- Use mutations with onSuccess/onError callbacks
+- Leverage optimistic updates for better UX
+- Use suspense boundaries for loading states where appropriate
+
+### TanStack Form Guidelines
+
+- Define form schemas with Zod validation
+- Use type-safe form fields with proper TypeScript types
+- Implement proper error handling and display
+- Leverage controlled form state management
+
+### TailwindCSS v4 & Styling
+
+- Use Tailwind utility classes, avoid custom CSS when possible
+- Use `clsx` or `cn` utility for conditional classes
+- Follow TailwindCSS v4 configuration patterns
+- Use CSS variables for theming (next-themes)
+- Prefer `tailwind-merge` for merging conflicting classes
+
+### shadcn/ui & Radix UI Components
+
+- Use shadcn/ui components as building blocks
+- Customize components in `/components/ui` directory
+- Follow Radix UI accessibility patterns
+- Use Radix primitives for headless UI components
+- Ensure keyboard navigation and ARIA attributes are preserved
+
+### Date & Time Handling
+
+- Use `date-fns` for date manipulation and formatting
+- Use `react-day-picker` for date picker components
+- Handle timezones correctly
+- Format dates consistently across the application
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

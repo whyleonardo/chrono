@@ -123,4 +123,92 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/auth
+
+This package handles **authentication configuration and logic** using Better-Auth.
+
+### Key Libraries & Frameworks
+
+- **Better-Auth** - Modern authentication library
+- **Zod** - Schema validation
+- **@chrono/db** - Database integration for user storage
+- **@chrono/env** - Environment variables
+
+### Better-Auth Best Practices
+
+- Configure auth providers consistently (OAuth, email/password, etc.)
+- Use Better-Auth's built-in security features (CSRF, session management)
+- Implement proper session handling and token management
+- Use Better-Auth hooks and middleware correctly
+- Keep auth configuration centralized in this package
+
+### Security Guidelines
+
+- **Never** store passwords in plain text
+- Use Better-Auth's built-in password hashing
+- Implement proper session expiration and renewal
+- Use secure, httpOnly cookies for session tokens
+- Implement rate limiting for authentication endpoints
+- Validate all authentication inputs thoroughly
+- Use CSRF protection for state-changing operations
+- Implement proper password requirements (length, complexity)
+- Use secure random token generation
+- Implement account lockout after failed login attempts
+
+### Session Management
+
+- Configure appropriate session durations
+- Implement session refresh logic
+- Handle session expiration gracefully
+- Clean up expired sessions from database
+- Use secure session storage
+- Implement "remember me" functionality securely
+
+### OAuth Integration
+
+- Securely store OAuth client secrets in environment variables
+- Validate OAuth redirect URIs
+- Handle OAuth errors and edge cases
+- Implement proper OAuth state validation
+- Support multiple OAuth providers consistently
+
+### Multi-Factor Authentication (if implemented)
+
+- Use time-based one-time passwords (TOTP) or similar
+- Provide backup codes for account recovery
+- Implement proper MFA enrollment flow
+- Allow users to manage MFA settings securely
+
+### User Management
+
+- Implement email verification for new accounts
+- Provide secure password reset functionality
+- Allow users to update their authentication methods
+- Implement account deletion/deactivation
+- Log authentication events for security auditing
+
+### Integration with Database
+
+- Use @chrono/db for storing user credentials and sessions
+- Implement proper database schema for auth tables
+- Use database transactions for critical auth operations
+- Index frequently queried auth fields (email, session tokens)
+
+### Error Handling
+
+- Don't leak information about user existence in error messages
+- Use generic error messages for failed authentication
+- Log detailed errors server-side for debugging
+- Implement proper error types for different auth failures
+
+### Testing
+
+- Test all authentication flows (signup, login, logout)
+- Test password reset and email verification
+- Test OAuth flows with mock providers
+- Test session management and expiration
+- Test security edge cases (timing attacks, brute force)
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

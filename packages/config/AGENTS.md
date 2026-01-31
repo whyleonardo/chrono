@@ -123,4 +123,72 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/config
+
+This package provides **shared TypeScript configuration** for the monorepo.
+
+### Purpose
+
+- Centralized TypeScript configuration
+- Shared compiler options across all packages
+- Consistent type checking rules
+- Build configuration standards
+
+### TypeScript Configuration Best Practices
+
+- Use `extends` to share base configuration
+- Keep configurations minimal and focused
+- Use strict mode for maximum type safety
+- Configure appropriate module resolution (bundler, node16)
+- Set proper target based on runtime environment
+- Use path aliases consistently across the monorepo
+
+### Configuration Guidelines
+
+- **Strict Mode**: Enable all strict type checking options
+  - `strict: true`
+  - `noUncheckedIndexedAccess: true`
+  - `noImplicitAny: true`
+  - `strictNullChecks: true`
+  
+- **Module System**: Use modern module resolution
+  - `module: "ESNext"` or `"NodeNext"`
+  - `moduleResolution: "bundler"` or `"node16"`
+  - `esModuleInterop: true`
+
+- **Output & Build**:
+  - `outDir` should be `./dist` or similar
+  - `declarationDir` for type definitions
+  - `sourceMap: true` for debugging
+
+- **Path Aliases**: Configure workspace package imports
+  - Use `paths` mapping for `@chrono/*` packages
+  - Keep aliases consistent with package structure
+
+### Monorepo Considerations
+
+- Create different configs for different contexts (base, react, node)
+- Allow packages to extend and override as needed
+- Keep runtime-specific options separated
+- Use composite projects for incremental compilation
+- Configure proper `include` and `exclude` patterns
+
+### Best Practices for TypeScript Configs
+
+- Don't override strict settings to be more lenient
+- Use `skipLibCheck: true` for faster builds (but understand the tradeoff)
+- Enable `resolveJsonModule` if importing JSON files
+- Use `allowJs: false` to keep codebase TypeScript-only
+- Set `isolatedModules: true` for better bundler compatibility
+- Use `forceConsistentCasingInFileNames: true` to avoid cross-platform issues
+
+### Maintenance
+
+- Review and update TypeScript version regularly
+- Keep configurations in sync with ecosystem best practices
+- Document any non-standard configuration choices
+- Test configuration changes across all packages
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

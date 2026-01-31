@@ -123,4 +123,104 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/db
+
+This package manages **database schema and queries** using Drizzle ORM with PostgreSQL.
+
+### Key Libraries & Frameworks
+
+- **Drizzle ORM** - Type-safe SQL query builder
+- **PostgreSQL** - Relational database
+- **pg** - PostgreSQL client for Node.js
+- **Drizzle Kit** - Schema migration tools
+- **Zod** - Schema validation
+- **Docker Compose** - Local database management
+
+### Drizzle ORM Best Practices
+
+- Define schemas using Drizzle's schema builders (`pgTable`, `serial`, `text`, etc.)
+- Export type-inferred types from schemas (`InferSelectModel`, `InferInsertModel`)
+- Use Drizzle's query builder for type-safe queries
+- Leverage Drizzle's relations API for joins
+- Use prepared statements for frequently executed queries
+- Use transactions for operations that must be atomic
+
+### Schema Design Guidelines
+
+- Use clear, descriptive table and column names (snake_case is PostgreSQL convention)
+- Define proper primary keys (prefer `serial` or `uuid`)
+- Use appropriate data types (timestamp, integer, text, boolean, jsonb)
+- Add NOT NULL constraints where appropriate
+- Create indexes on frequently queried columns
+- Use foreign keys to maintain referential integrity
+- Add `createdAt` and `updatedAt` timestamps to tables
+- Use JSONB for flexible document storage when appropriate
+
+### Migration Best Practices
+
+- Always generate migrations with `drizzle-kit generate`
+- Review generated migrations before applying
+- Test migrations on development data first
+- Make migrations reversible when possible
+- Use descriptive migration names
+- Never modify existing migrations that have been deployed
+- Backup database before running migrations in production
+
+### Query Patterns
+
+- Use Drizzle's query builder over raw SQL
+- Batch database operations when possible
+- Use select only the columns you need (avoid SELECT *)
+- Use proper WHERE clauses to filter data efficiently
+- Implement pagination with `limit()` and `offset()`
+- Use joins instead of multiple queries to avoid N+1 problems
+- Use Drizzle's `.prepare()` for repeated queries
+
+### Performance Optimization
+
+- Create indexes on columns used in WHERE, JOIN, and ORDER BY clauses
+- Use partial indexes for conditional queries
+- Avoid expensive operations in tight loops
+- Use database-level constraints and defaults
+- Use connection pooling (pg pool)
+- Monitor slow queries and optimize them
+- Use EXPLAIN ANALYZE to understand query performance
+
+### Security
+
+- Use parameterized queries (Drizzle does this automatically)
+- Never concatenate user input into SQL strings
+- Validate all input data with Zod before database operations
+- Use least-privilege database users
+- Encrypt sensitive data at rest and in transit
+- Implement proper access controls in application layer
+- Audit sensitive database operations
+
+### Environment & Connection Management
+
+- Use @chrono/env for database connection configuration
+- Use environment-specific database credentials
+- Implement connection pooling for better performance
+- Handle connection errors gracefully
+- Close connections properly on shutdown
+- Use Docker Compose for local PostgreSQL instance
+
+### Testing
+
+- Use separate test database
+- Reset database state between tests
+- Seed test data consistently
+- Test schema constraints and validations
+- Test transactions rollback correctly
+- Mock database calls in unit tests where appropriate
+
+### Type Safety
+
+- Export types derived from schemas using `InferSelectModel` and `InferInsertModel`
+- Use these types throughout the application for consistency
+- Leverage Drizzle's type inference for queries
+- Define Zod schemas that match database schemas for validation
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

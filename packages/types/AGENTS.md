@@ -123,4 +123,140 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/types
+
+This package contains **shared TypeScript types and Zod schemas** used across the monorepo.
+
+### Key Libraries & Frameworks
+
+- **TypeScript** - Type definitions
+- **Zod** - Runtime validation schemas
+
+### Purpose & Scope
+
+- Define shared types used by multiple packages
+- Create reusable Zod schemas for validation
+- Maintain type consistency across the monorepo
+- Provide domain models and business entities
+- Export utility types and type helpers
+
+### TypeScript Type Best Practices
+
+- Use interfaces for object shapes that might be extended
+- Use types for unions, intersections, and complex type logic
+- Create specific, focused types - avoid overly generic types
+- Use discriminated unions for polymorphic types
+- Leverage utility types (`Pick`, `Omit`, `Partial`, `Required`)
+- Document complex types with JSDoc comments
+- Export types explicitly, don't rely on implicit exports
+
+### Type Organization
+
+- Group related types together in files
+- Use clear, descriptive type names (PascalCase)
+- Create type aliases for complex type expressions
+- Use namespaces sparingly, prefer modules
+- Organize by domain/feature rather than by kind
+- Keep type files focused and single-purpose
+
+### Zod Schema Guidelines
+
+- Define Zod schemas alongside or instead of raw TypeScript types
+- Use `.brand()` or `.transform()` for branded types
+- Leverage Zod's type inference (`z.infer<typeof schema>`)
+- Create schema compositions for reusability
+- Use `.strict()` to prevent unexpected properties
+- Use `.describe()` to add documentation to schemas
+
+### Type Safety Patterns
+
+- Use `const` assertions for literal types
+- Leverage template literal types for string patterns
+- Use `satisfies` operator for type checking without widening
+- Create type guards for runtime type checking
+- Use `unknown` for truly unknown types, not `any`
+- Make illegal states unrepresentable with proper types
+
+### Shared Domain Models
+
+- Define core business entities (User, Product, Order, etc.)
+- Keep domain models separate from database models
+- Use Zod schemas for input validation
+- Export both the schema and inferred type
+- Version types if they change over time
+
+### Schema Composition
+
+- Create base schemas that can be extended
+- Use `.merge()` to combine schemas
+- Use `.pick()` and `.omit()` for schema subsets
+- Create schemas for common patterns (pagination, sorting, filtering)
+- Share validation logic across API and UI
+
+### Type vs Schema Considerations
+
+When to use TypeScript types:
+- Pure compile-time type checking
+- Type manipulation and utilities
+- When no runtime validation needed
+
+When to use Zod schemas:
+- Validating external input (API requests, form data)
+- Runtime type checking
+- Type inference for validated data
+- Documentation and error messages
+
+### Common Patterns
+
+```typescript
+// Schema with inferred type
+export const userSchema = z.object({
+  id: z.string().uuid(),
+  email: z.string().email(),
+  name: z.string().min(1),
+});
+export type User = z.infer<typeof userSchema>;
+
+// Pick/Omit for variations
+export const createUserSchema = userSchema.omit({ id: true });
+export type CreateUserInput = z.infer<typeof createUserSchema>;
+
+// Partial for updates
+export const updateUserSchema = userSchema.partial();
+export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+```
+
+### Utility Types
+
+- Create reusable utility types for common patterns
+- Paginated response types
+- API response wrappers (success, error)
+- Filter and sort types
+- ID types (branded strings)
+
+### Versioning & Evolution
+
+- Plan for type evolution over time
+- Use versioned types for breaking changes
+- Deprecate old types gradually
+- Document migration paths
+- Consider backwards compatibility
+
+### Documentation
+
+- Use JSDoc comments for complex types
+- Document generic parameters
+- Explain non-obvious type constraints
+- Provide usage examples for complex types
+- Document the relationship between related types
+
+### Testing Types
+
+- Use TypeScript's type system for type tests
+- Verify type inference works correctly
+- Test Zod schema validation
+- Ensure schema and type stay in sync
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.

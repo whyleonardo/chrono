@@ -123,4 +123,80 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 
 ---
 
+## Package-Specific Guidelines: packages/api
+
+This package contains the **API layer and business logic** using ORPC for type-safe APIs.
+
+### Key Libraries & Frameworks
+
+- **ORPC Server** - Type-safe API endpoints with OpenAPI integration
+- **ORPC Client** - Client-side API calls
+- **Zod** - Schema validation and type inference
+- **Next.js** - Server runtime integration
+- **@chrono/auth** - Authentication integration
+- **@chrono/db** - Database access
+
+### ORPC Server Best Practices
+
+- Define clear, RESTful-like procedure naming conventions
+- Use Zod schemas for input validation on all procedures
+- Keep procedures focused and single-purpose
+- Use proper HTTP methods semantics (query for reads, mutation for writes)
+- Return consistent response structures
+- Handle errors with proper error codes and messages
+- Use middleware for cross-cutting concerns (auth, logging, validation)
+
+### Schema Validation with Zod
+
+- Define input/output schemas for all API procedures
+- Use Zod's type inference to keep types in sync with schemas
+- Validate early and fail fast with clear error messages
+- Use Zod transforms for data sanitization
+- Create reusable schema components for common patterns
+- Use `.strict()` to prevent unexpected properties
+- Leverage Zod's built-in validators (email, url, uuid, etc.)
+
+### API Design Guidelines
+
+- Keep API responses predictable and well-typed
+- Use proper status codes (200, 201, 400, 401, 403, 404, 500)
+- Implement pagination for list endpoints
+- Version APIs when making breaking changes
+- Document complex business logic in comments
+- Use discriminated unions for polymorphic responses
+
+### Authentication & Authorization
+
+- Validate authentication tokens on protected procedures
+- Implement proper authorization checks based on user roles/permissions
+- Use context to pass authenticated user information
+- Fail securely - default to denying access
+- Log authentication failures for security monitoring
+
+### Database Integration
+
+- Use @chrono/db for all database operations
+- Keep database queries in the API layer, not in the web app
+- Use transactions for multi-step operations
+- Handle database errors gracefully
+- Avoid N+1 queries - use joins or batch loading
+
+### Error Handling
+
+- Create custom error types for different error scenarios
+- Provide meaningful error messages for debugging
+- Don't leak sensitive information in error messages
+- Log errors with sufficient context for troubleshooting
+- Use proper error status codes
+
+### Testing Considerations
+
+- Write tests for each API procedure
+- Test both success and failure cases
+- Validate schema validation is working
+- Test authentication/authorization logic
+- Mock external dependencies
+
+---
+
 Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.
