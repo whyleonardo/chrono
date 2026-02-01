@@ -1,11 +1,18 @@
-import { generateOpenAPI } from "@orpc/openapi";
+import { OpenAPIGenerator } from "@orpc/openapi";
+import { ZodToJsonSchemaConverter } from "@orpc/zod";
 import { appRouter } from "./routers";
+
+/**
+ * OpenAPI generator instance for creating API documentation
+ */
+const generator = new OpenAPIGenerator({
+	schemaConverters: [new ZodToJsonSchemaConverter()],
+});
 
 /**
  * Generate OpenAPI specification from app router
  */
-export const openAPISpec = generateOpenAPI({
-	router: appRouter,
+export const openAPISpec = await generator.generate(appRouter, {
 	info: {
 		title: "Chrono API",
 		version: "1.0.0",
