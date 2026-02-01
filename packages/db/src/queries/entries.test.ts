@@ -22,6 +22,10 @@ const TEST_DATE = "2026-01-31";
 
 describe("entries queries", () => {
 	beforeAll(async () => {
+		// Clean up any existing test data first
+		await db.delete(entries).where(eq(entries.userId, TEST_USER_ID));
+		await db.delete(user).where(eq(user.id, TEST_USER_ID));
+
 		await db.insert(user).values({
 			id: TEST_USER_ID,
 			name: "Test User",
@@ -90,7 +94,10 @@ describe("entries queries", () => {
 		});
 
 		it("should return null for non-existent entry", async () => {
-			const entry = await getEntryById("non-existent-id", TEST_USER_ID);
+			const entry = await getEntryById(
+				"00000000-0000-0000-0000-000000000000",
+				TEST_USER_ID
+			);
 			expect(entry).toBeNull();
 		});
 
@@ -332,11 +339,15 @@ describe("entries queries", () => {
 			expect(updated?.isBragWorthy).toBe(true);
 		});
 
-		it("should return undefined for non-existent entry", async () => {
-			const updated = await updateEntry("non-existent", TEST_USER_ID, {
-				title: "Updated",
-			});
-			expect(updated).toBeUndefined();
+		it("should return null for non-existent entry", async () => {
+			const updated = await updateEntry(
+				"00000000-0000-0000-0000-000000000000",
+				TEST_USER_ID,
+				{
+					title: "Updated",
+				}
+			);
+			expect(updated).toBeNull();
 		});
 	});
 
@@ -358,9 +369,12 @@ describe("entries queries", () => {
 			expect(entry).toBeNull();
 		});
 
-		it("should return undefined for non-existent entry", async () => {
-			const deleted = await deleteEntry("non-existent", TEST_USER_ID);
-			expect(deleted).toBeUndefined();
+		it("should return null for non-existent entry", async () => {
+			const deleted = await deleteEntry(
+				"00000000-0000-0000-0000-000000000000",
+				TEST_USER_ID
+			);
+			expect(deleted).toBeNull();
 		});
 	});
 });

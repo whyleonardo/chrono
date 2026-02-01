@@ -1,4 +1,4 @@
-import { and, arrayContains, desc, eq, gte, lte, sql } from "drizzle-orm";
+import { and, arrayContains, desc, eq, gte, lte } from "drizzle-orm";
 import { db } from "..";
 import { entries, type moodEnum } from "../schema/entries";
 
@@ -63,7 +63,7 @@ export async function getEntryById(entryId: string, userId: string) {
 		where: and(eq(entries.id, entryId), eq(entries.userId, userId)),
 	});
 
-	return entry;
+	return entry ?? null;
 }
 
 export async function getEntriesByUser(userId: string) {
@@ -135,32 +135,56 @@ export async function getHeatmapData(
 	startDate: string,
 	endDate: string
 ): Promise<HeatmapDataPoint[]> {
-	const result = await db
-		.select({
-			date: entries.date,
-			moods: entries.moods,
-			dominantMood: entries.dominantMood,
-			entryCount: sql<number>`count(*)::int`,
-			hasBragWorthy: sql<boolean>`bool_or(${entries.isBragWorthy})`,
-		})
-		.from(entries)
-		.where(
-			and(
-				eq(entries.userId, userId),
-				gte(entries.date, startDate),
-				lte(entries.date, endDate)
-			)
-		)
-		.groupBy(entries.date, entries.moods, entries.dominantMood)
-		.orderBy(entries.date);
+	// First, get all entries in the date range
+	const userEntries = await db.query.entries.findMany({
+		where: and(
+			eq(entries.userId, userId),
+			gte(entries.date, startDate),
+			lte(entries.date, endDate)
+		),
+		orderBy: [entries.date],
+	});
 
-	return result.map((row) => ({
-		date: row.date,
-		moods: row.moods as Mood[],
-		dominantMood: row.dominantMood as Mood | null,
-		entryCount: row.entryCount,
-		hasBragWorthy: row.hasBragWorthy,
-	}));
+	// Group by date and aggregate
+	const grouped = new Map<string, typeof userEntries>();
+	for (const entry of userEntries) {
+		const existing = grouped.get(entry.date) ?? [];
+		existing.push(entry);
+		grouped.set(entry.date, existing);
+	}
+
+	// Convert to heatmap data points
+	return Array.from(grouped.entries()).map(([date, dayEntries]) => {
+		const allMoods = dayEntries.flatMap((e) => e.moods);
+		const uniqueMoods = [...new Set(allMoods)];
+
+		// Get the most common dominant mood
+		const dominantMoodCounts = new Map<Mood, number>();
+		for (const entry of dayEntries) {
+			if (entry.dominantMood) {
+				dominantMoodCounts.set(
+					entry.dominantMood,
+					(dominantMoodCounts.get(entry.dominantMood) ?? 0) + 1
+				);
+			}
+		}
+		let dominantMood: Mood | null = null;
+		let maxCount = 0;
+		for (const [mood, count] of dominantMoodCounts) {
+			if (count > maxCount) {
+				dominantMood = mood;
+				maxCount = count;
+			}
+		}
+
+		return {
+			date,
+			moods: uniqueMoods,
+			dominantMood,
+			entryCount: dayEntries.length,
+			hasBragWorthy: dayEntries.some((e) => e.isBragWorthy),
+		};
+	});
 }
 
 export async function updateEntry(
@@ -209,7 +233,7 @@ export async function updateEntry(
 			updatedAt: entries.updatedAt,
 		});
 
-	return updatedEntry;
+	return updatedEntry ?? null;
 }
 
 export async function deleteEntry(entryId: string, userId: string) {
@@ -220,5 +244,5 @@ export async function deleteEntry(entryId: string, userId: string) {
 			id: entries.id,
 		});
 
-	return deletedEntry;
+	return deletedEntry ?? null;
 }
