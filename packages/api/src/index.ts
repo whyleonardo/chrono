@@ -18,3 +18,13 @@ const requireAuth = o.middleware(async ({ context, next }) => {
 });
 
 export const protectedProcedure = publicProcedure.use(requireAuth);
+
+// Export entry router procedures
+export {
+	createEntry,
+	deleteEntry,
+	getEntry,
+	listEntries,
+	toggleBragWorthy,
+	updateEntry,
+} from "./routers/entries";
