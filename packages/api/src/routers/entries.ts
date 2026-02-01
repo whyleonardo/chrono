@@ -22,10 +22,6 @@ import {
 	extractMoodsFromContent,
 } from "../utils/mood-extractor";
 
-/**
- * Create a new entry with automatic mood extraction
- * POST /entries
- */
 export const createEntry = protectedProcedure
 	.route({
 		method: "POST",
@@ -39,13 +35,10 @@ export const createEntry = protectedProcedure
 		const { title, content, date } = input;
 		const userId = context.session.user.id;
 
-		// Extract moods from content
 		const extractedMoods = extractMoodsFromContent(content);
 		const dominantMood = calculateDominantMood(extractedMoods);
 
-		// Extract date part only (PostgreSQL date type expects YYYY-MM-DD)
-		const dateObj = new Date(date);
-		const dateString = dateObj.toISOString().split("T")[0];
+		const dateString = new Date(date).toISOString().split("T")[0];
 
 		if (!dateString) {
 			throw new ORPCError("BAD_REQUEST", {
@@ -74,10 +67,6 @@ export const createEntry = protectedProcedure
 		return entry as Entry;
 	});
 
-/**
- * List entries with filtering and pagination
- * GET /entries
- */
 export const listEntries = protectedProcedure
 	.route({
 		method: "GET",
@@ -87,30 +76,20 @@ export const listEntries = protectedProcedure
 			"List career journal entries with optional filtering by date range, mood, and brag-worthy status. Supports pagination with limit and offset parameters.",
 	})
 	.input(ListEntriesInputSchema)
-	.handler(async ({ input, context }): Promise<Entry[]> => {
+	.handler(async ({ input, context }) => {
 		const { startDate, endDate, mood, bragWorthy, limit, offset } = input;
 		const userId = context.session.user.id;
-
-		// Format date strings for query
-		const formattedStartDate = startDate
-			? new Date(startDate).toISOString().split("T")[0]
-			: undefined;
-		const formattedEndDate = endDate
-			? new Date(endDate).toISOString().split("T")[0]
-			: undefined;
 
 		const results = await listEntriesQuery(
 			userId,
 			{
-				startDate: formattedStartDate,
-				endDate: formattedEndDate,
-				mood: mood as
-					| "flow"
-					| "buggy"
-					| "learning"
-					| "meetings"
-					| "standard"
-					| undefined,
+				startDate: startDate
+					? new Date(startDate).toISOString().split("T")[0]
+					: undefined,
+				endDate: endDate
+					? new Date(endDate).toISOString().split("T")[0]
+					: undefined,
+				mood,
 				bragWorthy,
 			},
 			{ limit, offset }
@@ -119,10 +98,6 @@ export const listEntries = protectedProcedure
 		return results as Entry[];
 	});
 
-/**
- * Get a single entry by ID
- * GET /entries/:id
- */
 export const getEntry = protectedProcedure
 	.route({
 		method: "GET",
@@ -132,7 +107,7 @@ export const getEntry = protectedProcedure
 			"Retrieve a single career journal entry by its ID. Returns 404 if the entry doesn't exist or belongs to another user.",
 	})
 	.input(GetEntryInputSchema)
-	.handler(async ({ input, context }): Promise<Entry> => {
+	.handler(async ({ input, context }) => {
 		const { id } = input;
 		const userId = context.session.user.id;
 
@@ -148,10 +123,6 @@ export const getEntry = protectedProcedure
 		return entry as Entry;
 	});
 
-/**
- * Update an entry
- * PUT /entries/:id
- */
 export const updateEntry = protectedProcedure
 	.route({
 		method: "PUT",
@@ -161,11 +132,10 @@ export const updateEntry = protectedProcedure
 			"Update an existing career journal entry. If content is updated, moods are automatically re-extracted. Returns 404 if the entry doesn't exist or belongs to another user. Throws 400 if no fields are provided for update.",
 	})
 	.input(UpdateEntryInputSchema)
-	.handler(async ({ input, context }): Promise<Entry> => {
+	.handler(async ({ input, context }) => {
 		const { id, ...updates } = input;
 		const userId = context.session.user.id;
 
-		// Re-extract moods if content changed
 		const updateData: Parameters<typeof updateEntryQuery>[2] = {};
 
 		if (updates.title !== undefined) {
@@ -184,7 +154,6 @@ export const updateEntry = protectedProcedure
 			updateData.date = new Date(updates.date).toISOString().split("T")[0];
 		}
 
-		// Prevent empty updates
 		if (Object.keys(updateData).length === 0) {
 			throw new ORPCError("BAD_REQUEST", {
 				message: "No fields provided for update",
@@ -204,10 +173,6 @@ export const updateEntry = protectedProcedure
 		return entry as Entry;
 	});
 
-/**
- * Delete an entry
- * DELETE /entries/:id
- */
 export const deleteEntry = protectedProcedure
 	.route({
 		method: "DELETE",
@@ -217,7 +182,7 @@ export const deleteEntry = protectedProcedure
 			"Delete a career journal entry permanently. Returns 404 if the entry doesn't exist or belongs to another user.",
 	})
 	.input(DeleteEntryInputSchema)
-	.handler(async ({ input, context }): Promise<{ success: boolean }> => {
+	.handler(async ({ input, context }) => {
 		const { id } = input;
 		const userId = context.session.user.id;
 
@@ -233,10 +198,6 @@ export const deleteEntry = protectedProcedure
 		return { success: true };
 	});
 
-/**
- * Toggle brag-worthy flag on an entry
- * PATCH /entries/:id/flag
- */
 export const toggleBragWorthy = protectedProcedure
 	.route({
 		method: "PATCH",
@@ -246,7 +207,7 @@ export const toggleBragWorthy = protectedProcedure
 			"Toggle the brag-worthy flag on an entry. Brag-worthy entries are highlighted in the brag document for performance reviews and career milestones. Returns 404 if the entry doesn't exist or belongs to another user.",
 	})
 	.input(ToggleBragWorthyInputSchema)
-	.handler(async ({ input, context }): Promise<Entry> => {
+	.handler(async ({ input, context }) => {
 		const { id, isBragWorthy } = input;
 		const userId = context.session.user.id;
 

@@ -1,8 +1,3 @@
-/**
- * Test utilities for creating mock authentication contexts
- * Bypasses actual Better-Auth session validation for unit tests
- */
-
 export interface AuthContext {
 	session: {
 		session: {
@@ -27,9 +22,6 @@ export interface AuthContext {
 	} | null;
 }
 
-/**
- * Creates a mock authentication context for testing
- */
 export function createMockContext(
 	userId = "test-user-api",
 	email = "test-api@example.com",
@@ -60,9 +52,6 @@ export function createMockContext(
 	};
 }
 
-/**
- * Creates a mock context for a different user (for testing authorization)
- */
 export function createMockOtherUserContext(
 	userId = "other-user-api",
 	email = "other@example.com",
