@@ -1,20 +1,15 @@
-import { ORPCError, os } from "@orpc/server";
+// Export procedures
 
-import type { Context } from "./context";
+// Export OpenAPI specification
+export { openAPISpec } from "./openapi";
+export { protectedProcedure, publicProcedure } from "./procedures";
 
-export const o = os.$context<Context>();
-
-export const publicProcedure = o;
-
-const requireAuth = o.middleware(async ({ context, next }) => {
-	if (!context.session?.user) {
-		throw new ORPCError("UNAUTHORIZED");
-	}
-	return next({
-		context: {
-			session: context.session,
-		},
-	});
-});
-
-export const protectedProcedure = publicProcedure.use(requireAuth);
+// Export entry router procedures
+export {
+	createEntry,
+	deleteEntry,
+	getEntry,
+	listEntries,
+	toggleBragWorthy,
+	updateEntry,
+} from "./routers/entries";

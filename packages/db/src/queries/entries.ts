@@ -20,6 +20,7 @@ export interface UpdateEntryInput {
 	moods?: Mood[];
 	dominantMood?: Mood | null;
 	isBragWorthy?: boolean;
+	date?: string;
 	aiFeedback?: string;
 	aiSuggestedBullets?: string[];
 	aiBragWorthySuggestion?: {
@@ -122,6 +123,71 @@ export async function getEntriesByDominantMood(userId: string, mood: Mood) {
 	return moodEntries;
 }
 
+export interface ListEntriesFilters {
+	startDate?: string;
+	endDate?: string;
+	mood?: Mood;
+	bragWorthy?: boolean;
+}
+
+export interface ListEntriesPagination {
+	limit: number;
+	offset: number;
+}
+
+export async function listEntries(
+	userId: string,
+	filters: ListEntriesFilters,
+	pagination: ListEntriesPagination
+) {
+	const { startDate, endDate, mood, bragWorthy } = filters;
+	const { limit, offset } = pagination;
+
+	// Build where conditions dynamically
+	const conditions = [eq(entries.userId, userId)];
+
+	if (startDate) {
+		conditions.push(gte(entries.date, startDate));
+	}
+
+	if (endDate) {
+		conditions.push(lte(entries.date, endDate));
+	}
+
+	if (mood) {
+		conditions.push(arrayContains(entries.moods, [mood]));
+	}
+
+	if (bragWorthy !== undefined) {
+		conditions.push(eq(entries.isBragWorthy, bragWorthy));
+	}
+
+	const results = await db
+		.select({
+			id: entries.id,
+			userId: entries.userId,
+			date: entries.date,
+			title: entries.title,
+			content: entries.content,
+			moods: entries.moods,
+			dominantMood: entries.dominantMood,
+			isBragWorthy: entries.isBragWorthy,
+			aiFeedback: entries.aiFeedback,
+			aiSuggestedBullets: entries.aiSuggestedBullets,
+			aiBragWorthySuggestion: entries.aiBragWorthySuggestion,
+			aiAnalyzedAt: entries.aiAnalyzedAt,
+			createdAt: entries.createdAt,
+			updatedAt: entries.updatedAt,
+		})
+		.from(entries)
+		.where(and(...conditions))
+		.orderBy(desc(entries.date))
+		.limit(limit)
+		.offset(offset);
+
+	return results;
+}
+
 export interface HeatmapDataPoint {
 	date: string;
 	moods: Mood[];
@@ -204,6 +270,7 @@ export async function updateEntry(
 			...(input.isBragWorthy !== undefined && {
 				isBragWorthy: input.isBragWorthy,
 			}),
+			...(input.date !== undefined && { date: input.date }),
 			...(input.aiFeedback !== undefined && { aiFeedback: input.aiFeedback }),
 			...(input.aiSuggestedBullets !== undefined && {
 				aiSuggestedBullets: input.aiSuggestedBullets,
@@ -245,4 +312,33 @@ export async function deleteEntry(entryId: string, userId: string) {
 		});
 
 	return deletedEntry ?? null;
+}
+
+export async function toggleBragWorthy(
+	entryId: string,
+	userId: string,
+	isBragWorthy: boolean
+) {
+	const [entry] = await db
+		.update(entries)
+		.set({ isBragWorthy })
+		.where(and(eq(entries.id, entryId), eq(entries.userId, userId)))
+		.returning({
+			id: entries.id,
+			userId: entries.userId,
+			date: entries.date,
+			title: entries.title,
+			content: entries.content,
+			moods: entries.moods,
+			dominantMood: entries.dominantMood,
+			isBragWorthy: entries.isBragWorthy,
+			aiFeedback: entries.aiFeedback,
+			aiSuggestedBullets: entries.aiSuggestedBullets,
+			aiBragWorthySuggestion: entries.aiBragWorthySuggestion,
+			aiAnalyzedAt: entries.aiAnalyzedAt,
+			createdAt: entries.createdAt,
+			updatedAt: entries.updatedAt,
+		});
+
+	return entry ?? null;
 }

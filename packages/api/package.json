@@ -14,11 +14,13 @@
     "@chrono/auth": "workspace:*",
     "@chrono/db": "workspace:*",
     "@chrono/env": "workspace:*",
+    "@chrono/types": "workspace:*",
     "@orpc/client": "catalog:",
     "@orpc/openapi": "catalog:",
     "@orpc/server": "catalog:",
     "@orpc/zod": "catalog:",
     "dotenv": "catalog:",
+    "drizzle-orm": "^0.45.1",
     "next": "catalog:",
     "zod": "catalog:"
   },
