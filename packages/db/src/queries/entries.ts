@@ -156,7 +156,7 @@ export async function getHeatmapData(
 	// Convert to heatmap data points
 	return Array.from(grouped.entries()).map(([date, dayEntries]) => {
 		const allMoods = dayEntries.flatMap((e) => e.moods);
-		const uniqueMoods = [...new Set(allMoods)];
+		const uniqueMoods = Array.from(new Set(allMoods));
 
 		// Get the most common dominant mood
 		const dominantMoodCounts = new Map<Mood, number>();
@@ -170,7 +170,7 @@ export async function getHeatmapData(
 		}
 		let dominantMood: Mood | null = null;
 		let maxCount = 0;
-		for (const [mood, count] of dominantMoodCounts) {
+		for (const [mood, count] of Array.from(dominantMoodCounts.entries())) {
 			if (count > maxCount) {
 				dominantMood = mood;
 				maxCount = count;
