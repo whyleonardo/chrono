@@ -1,16 +1,22 @@
 "use client";
 
 import { motion } from "motion/react";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signIn, signUp } from "@/lib/auth-client";
 
 export default function SignInPage() {
+	const searchParams = useSearchParams();
+	const tab = searchParams.get("tab");
+
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [showEmailForm, setShowEmailForm] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
+	const [activeTab, setActiveTab] = useState<"signin" | "signup">(
+		tab === "signup" ? "signup" : "signin"
+	);
 
 	useEffect(() => {
 		setIsLoaded(true);
