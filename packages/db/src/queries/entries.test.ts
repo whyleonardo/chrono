@@ -52,7 +52,12 @@ describe("entries queries", () => {
 
 			const entry = await createEntry(input);
 
-			expect(entry).toBeDefined();
+      expect(entry).toBeDefined();
+
+			if (!entry) {
+				return;
+      }
+
 			expect(entry.userId).toBe(TEST_USER_ID);
 			expect(entry.title).toBe("Test Entry");
 			expect(entry.moods).toEqual(["flow"]);
@@ -70,6 +75,12 @@ describe("entries queries", () => {
 
 			const entry = await createEntry(input);
 
+			expect(entry).toBeDefined();
+
+			if (!entry) {
+				return;
+			}
+
 			expect(entry.isBragWorthy).toBe(false);
 			expect(entry.title).toBeNull();
 			expect(entry.dominantMood).toBeNull();
@@ -85,6 +96,11 @@ describe("entries queries", () => {
 				content: { type: "doc", content: [] },
 				moods: ["flow"] as Mood[],
 			});
+      expect(created).toBeDefined();
+
+			if (!created) {
+				return;
+			}
 
 			const entry = await getEntryById(created.id, TEST_USER_ID);
 
@@ -108,6 +124,11 @@ describe("entries queries", () => {
 				content: { type: "doc", content: [] },
 				moods: [] as Mood[],
 			});
+      expect(created).toBeDefined();
+
+			if (!created) {
+				return;
+			}
 
 			const entry = await getEntryById(created.id, "different-user");
 			expect(entry).toBeNull();
@@ -132,9 +153,15 @@ describe("entries queries", () => {
 
 			const userEntries = await getEntriesByUser(TEST_USER_ID);
 
-			expect(userEntries).toHaveLength(2);
-			expect(userEntries[0].date).toBe("2026-01-31");
-			expect(userEntries[1].date).toBe("2026-01-30");
+      expect(userEntries).toHaveLength(2);
+
+      if (userEntries[0]) {
+				expect(userEntries[0].date).toBe("2026-01-31");
+      }
+
+			if (userEntries[1]) {
+				expect(userEntries[1].date).toBe("2026-01-30");
+			}
 		});
 
 		it("should return empty array for user with no entries", async () => {
@@ -172,8 +199,11 @@ describe("entries queries", () => {
 				"2026-01-22"
 			);
 
-			expect(rangeEntries).toHaveLength(1);
-			expect(rangeEntries[0].date).toBe("2026-01-20");
+      expect(rangeEntries).toHaveLength(1);
+
+      if (rangeEntries[0]) {
+				expect(rangeEntries[0].date).toBe("2026-01-20");
+			}
 		});
 
 		it("should return empty array when no entries in range", async () => {
@@ -307,9 +337,12 @@ describe("entries queries", () => {
 			);
 
 			expect(heatmap).toHaveLength(1);
-			expect(heatmap[0].date).toBe("2026-01-20");
-			expect(heatmap[0].entryCount).toBe(2);
-			expect(heatmap[0].hasBragWorthy).toBe(true);
+
+      if (heatmap[0]) {
+				expect(heatmap[0].date).toBe("2026-01-20");
+				expect(heatmap[0].entryCount).toBe(2);
+				expect(heatmap[0].hasBragWorthy).toBe(true);
+			}
 		});
 	});
 
@@ -324,6 +357,12 @@ describe("entries queries", () => {
 				dominantMood: "flow" as Mood,
 				isBragWorthy: false,
 			});
+
+      expect(created).toBeDefined();
+
+      if (!created) {
+				return;
+			}
 
 			const updated = await updateEntry(created.id, TEST_USER_ID, {
 				title: "Updated Title",
@@ -360,13 +399,20 @@ describe("entries queries", () => {
 				moods: [] as Mood[],
 			});
 
+      expect(created).toBeDefined();
+
+      if (!created) {
+				return;
+			}
+
 			const deleted = await deleteEntry(created.id, TEST_USER_ID);
 
 			expect(deleted).toBeDefined();
 			expect(deleted?.id).toBe(created.id);
 
 			const entry = await getEntryById(created.id, TEST_USER_ID);
-			expect(entry).toBeNull();
+
+      expect(entry).toBeNull();
 		});
 
 		it("should return null for non-existent entry", async () => {
@@ -374,7 +420,8 @@ describe("entries queries", () => {
 				"00000000-0000-0000-0000-000000000000",
 				TEST_USER_ID
 			);
-			expect(deleted).toBeNull();
+
+      expect(deleted).toBeNull();
 		});
 	});
 });
