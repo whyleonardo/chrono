@@ -27,6 +27,13 @@ import {
  * POST /entries
  */
 export const createEntry = protectedProcedure
+	.route({
+		method: "POST",
+		path: "/entries",
+		summary: "Create Entry",
+		description:
+			"Create a new career journal entry with automatic mood extraction from TipTap content. Extracted moods are stored and used for heatmap visualization.",
+	})
 	.input(CreateEntryInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { title, content, date } = input;
@@ -69,9 +76,16 @@ export const createEntry = protectedProcedure
 
 /**
  * List entries with filtering and pagination
- * GET /entries?startDate=&endDate=&mood=&bragWorthy=&limit=&offset=
+ * GET /entries
  */
 export const listEntries = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/entries",
+		summary: "List Entries",
+		description:
+			"List career journal entries with optional filtering by date range, mood, and brag-worthy status. Supports pagination with limit and offset parameters.",
+	})
 	.input(ListEntriesInputSchema)
 	.handler(async ({ input, context }): Promise<Entry[]> => {
 		const { startDate, endDate, mood, bragWorthy, limit, offset } = input;
@@ -110,6 +124,13 @@ export const listEntries = protectedProcedure
  * GET /entries/:id
  */
 export const getEntry = protectedProcedure
+	.route({
+		method: "GET",
+		path: "/entries/{id}",
+		summary: "Get Entry",
+		description:
+			"Retrieve a single career journal entry by its ID. Returns 404 if the entry doesn't exist or belongs to another user.",
+	})
 	.input(GetEntryInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { id } = input;
@@ -132,6 +153,13 @@ export const getEntry = protectedProcedure
  * PUT /entries/:id
  */
 export const updateEntry = protectedProcedure
+	.route({
+		method: "PUT",
+		path: "/entries/{id}",
+		summary: "Update Entry",
+		description:
+			"Update an existing career journal entry. If content is updated, moods are automatically re-extracted. Returns 404 if the entry doesn't exist or belongs to another user. Throws 400 if no fields are provided for update.",
+	})
 	.input(UpdateEntryInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { id, ...updates } = input;
@@ -181,6 +209,13 @@ export const updateEntry = protectedProcedure
  * DELETE /entries/:id
  */
 export const deleteEntry = protectedProcedure
+	.route({
+		method: "DELETE",
+		path: "/entries/{id}",
+		summary: "Delete Entry",
+		description:
+			"Delete a career journal entry permanently. Returns 404 if the entry doesn't exist or belongs to another user.",
+	})
 	.input(DeleteEntryInputSchema)
 	.handler(async ({ input, context }): Promise<{ success: boolean }> => {
 		const { id } = input;
@@ -203,6 +238,13 @@ export const deleteEntry = protectedProcedure
  * PATCH /entries/:id/flag
  */
 export const toggleBragWorthy = protectedProcedure
+	.route({
+		method: "PATCH",
+		path: "/entries/{id}/flag",
+		summary: "Toggle Brag-Worthy Flag",
+		description:
+			"Toggle the brag-worthy flag on an entry. Brag-worthy entries are highlighted in the brag document for performance reviews and career milestones. Returns 404 if the entry doesn't exist or belongs to another user.",
+	})
 	.input(ToggleBragWorthyInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { id, isBragWorthy } = input;
