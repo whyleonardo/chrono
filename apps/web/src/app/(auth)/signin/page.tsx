@@ -1,45 +1,30 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { signIn, signUp } from "@/lib/auth-client";
+import Link from "next/link";
+import { useState } from "react";
+import { signIn } from "@/lib/auth-client";
 
 export default function SignInPage() {
-	const searchParams = useSearchParams();
-	const tab = searchParams.get("tab");
-
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [showEmailForm, setShowEmailForm] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [activeTab, setActiveTab] = useState<"signin" | "signup">(
-		tab === "signup" ? "signup" : "signin"
-	);
 
-	useEffect(() => {
+	useState(() => {
 		setIsLoaded(true);
-	}, []);
+	});
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
-		if (activeTab === "signin") {
-			await signIn.email({
-				email,
-				password,
-				callbackURL: "/dashboard",
-			});
-		} else {
-			await signUp.email({
-				email,
-				password,
-				name: email.split("@")[0],
-				callbackURL: "/dashboard",
-			});
-		}
+		await signIn.email({
+			email,
+			password,
+			callbackURL: "/dashboard",
+		});
 
 		setIsLoading(false);
 	};
@@ -522,10 +507,10 @@ export default function SignInPage() {
 							className="mb-2 font-medium text-2xl"
 							style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
 						>
-							Welcome to Chrono
+							Welcome back
 						</h1>
 						<p className="text-muted-foreground text-sm">
-							Sign in or create an account
+							Sign in to continue your journey
 						</p>
 					</div>
 
@@ -555,32 +540,6 @@ export default function SignInPage() {
 								</svg>
 								Back
 							</motion.button>
-
-							{/* Tab Switcher */}
-							<div className="mb-6 flex rounded-md bg-muted p-1">
-								<button
-									className={`flex-1 rounded-sm py-2 font-medium text-sm transition-all ${
-										activeTab === "signin"
-											? "bg-background text-foreground shadow-sm"
-											: "text-muted-foreground hover:text-foreground"
-									}`}
-									onClick={() => setActiveTab("signin")}
-									type="button"
-								>
-									Sign In
-								</button>
-								<button
-									className={`flex-1 rounded-sm py-2 font-medium text-sm transition-all ${
-										activeTab === "signup"
-											? "bg-background text-foreground shadow-sm"
-											: "text-muted-foreground hover:text-foreground"
-									}`}
-									onClick={() => setActiveTab("signup")}
-									type="button"
-								>
-									Sign Up
-								</button>
-							</div>
 
 							{/* Email Form */}
 							<form className="space-y-4" onSubmit={handleSubmit}>
@@ -636,9 +595,7 @@ export default function SignInPage() {
 											}}
 										/>
 									) : (
-										<span>
-											{activeTab === "signin" ? "Sign In" : "Sign Up"}
-										</span>
+										<span>Sign In</span>
 									)}
 								</motion.button>
 							</form>
@@ -725,10 +682,28 @@ export default function SignInPage() {
 								whileHover={{ scale: 1.01 }}
 								whileTap={{ scale: 0.99 }}
 							>
-								Show other options
+								Continue with Email
 							</motion.button>
 						</>
 					)}
+
+					{/* Sign Up Link */}
+					<motion.div
+						animate={isLoaded ? { opacity: 1 } : {}}
+						className="mt-6 text-center"
+						initial={{ opacity: 0 }}
+						transition={{ duration: 0.5, delay: 0.5 }}
+					>
+						<p className="text-muted-foreground text-sm">
+							Don't have an account?{" "}
+							<Link
+								className="text-foreground underline transition-colors hover:text-primary"
+								href="/auth/signup"
+							>
+								Sign up
+							</Link>
+						</p>
+					</motion.div>
 
 					{/* Footer */}
 					<motion.p
