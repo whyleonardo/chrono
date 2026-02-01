@@ -19,6 +19,8 @@ const requireAuth = o.middleware(async ({ context, next }) => {
 
 export const protectedProcedure = publicProcedure.use(requireAuth);
 
+// Export OpenAPI specification
+export { openAPISpec } from "./openapi";
 // Export entry router procedures
 export {
 	createEntry,
