@@ -10,7 +10,7 @@ import {
 } from "@chrono/types/entry";
 import { ORPCError } from "@orpc/server";
 import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
-import { protectedProcedure } from "../index";
+import { protectedProcedure } from "../procedures";
 import {
 	calculateDominantMood,
 	extractMoodsFromContent,
@@ -24,14 +24,7 @@ export const createEntry = protectedProcedure
 	.input(CreateEntryInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { title, content, date } = input;
-		const userId = context.session?.user?.id;
-
-		if (!userId) {
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "User not authenticated",
-				status: 401,
-			});
-		}
+		const userId = context.session.user.id;
 
 		// Extract moods from content
 		const extractedMoods = extractMoodsFromContent(content);
@@ -79,14 +72,7 @@ export const listEntries = protectedProcedure
 	.input(ListEntriesInputSchema)
 	.handler(async ({ input, context }): Promise<Entry[]> => {
 		const { startDate, endDate, mood, bragWorthy, limit, offset } = input;
-		const userId = context.session?.user?.id;
-
-		if (!userId) {
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "User not authenticated",
-				status: 401,
-			});
-		}
+		const userId = context.session.user.id;
 
 		// Build where conditions dynamically
 		const conditions = [eq(entries.userId, userId)];
@@ -115,7 +101,22 @@ export const listEntries = protectedProcedure
 		}
 
 		const results = await db
-			.select()
+			.select({
+				id: entries.id,
+				userId: entries.userId,
+				date: entries.date,
+				title: entries.title,
+				content: entries.content,
+				moods: entries.moods,
+				dominantMood: entries.dominantMood,
+				isBragWorthy: entries.isBragWorthy,
+				aiFeedback: entries.aiFeedback,
+				aiSuggestedBullets: entries.aiSuggestedBullets,
+				aiBragWorthySuggestion: entries.aiBragWorthySuggestion,
+				aiAnalyzedAt: entries.aiAnalyzedAt,
+				createdAt: entries.createdAt,
+				updatedAt: entries.updatedAt,
+			})
 			.from(entries)
 			.where(and(...conditions))
 			.orderBy(desc(entries.date))
@@ -133,14 +134,7 @@ export const getEntry = protectedProcedure
 	.input(GetEntryInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { id } = input;
-		const userId = context.session?.user?.id;
-
-		if (!userId) {
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "User not authenticated",
-				status: 401,
-			});
-		}
+		const userId = context.session.user.id;
 
 		const entry = await db.query.entries.findFirst({
 			where: and(eq(entries.id, id), eq(entries.userId, userId)),
@@ -164,14 +158,7 @@ export const updateEntry = protectedProcedure
 	.input(UpdateEntryInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { id, ...updates } = input;
-		const userId = context.session?.user?.id;
-
-		if (!userId) {
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "User not authenticated",
-				status: 401,
-			});
-		}
+		const userId = context.session.user.id;
 
 		// Re-extract moods if content changed
 		const updateData: Record<string, unknown> = {};
@@ -192,11 +179,19 @@ export const updateEntry = protectedProcedure
 			updateData.date = new Date(updates.date).toISOString().split("T")[0];
 		}
 
+		// Prevent empty updates
+		if (Object.keys(updateData).length === 0) {
+			throw new ORPCError("BAD_REQUEST", {
+				message: "No fields provided for update",
+				status: 400,
+			});
+		}
+
 		const [entry] = await db
 			.update(entries)
 			.set({
 				...updateData,
-				updatedAt: /* @__PURE__ */ new Date(),
+				updatedAt: new Date(),
 			})
 			.where(and(eq(entries.id, id), eq(entries.userId, userId)))
 			.returning();
@@ -219,14 +214,7 @@ export const deleteEntry = protectedProcedure
 	.input(DeleteEntryInputSchema)
 	.handler(async ({ input, context }): Promise<{ success: boolean }> => {
 		const { id } = input;
-		const userId = context.session?.user?.id;
-
-		if (!userId) {
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "User not authenticated",
-				status: 401,
-			});
-		}
+		const userId = context.session.user.id;
 
 		const result = await db
 			.delete(entries)
@@ -251,14 +239,7 @@ export const toggleBragWorthy = protectedProcedure
 	.input(ToggleBragWorthyInputSchema)
 	.handler(async ({ input, context }): Promise<Entry> => {
 		const { id, isBragWorthy } = input;
-		const userId = context.session?.user?.id;
-
-		if (!userId) {
-			throw new ORPCError("UNAUTHORIZED", {
-				message: "User not authenticated",
-				status: 401,
-			});
-		}
+		const userId = context.session.user.id;
 
 		const [entry] = await db
 			.update(entries)

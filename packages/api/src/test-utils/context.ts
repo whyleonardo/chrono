@@ -35,10 +35,8 @@ export function createMockContext(
 	email = "test-api@example.com",
 	name = "Test User"
 ): AuthContext {
-	const now = /* @__PURE__ */ new Date();
-	const expiresAt = /* @__PURE__ */ new Date(
-		now.getTime() + 24 * 60 * 60 * 1000
-	);
+	const now = new Date();
+	const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
 	return {
 		session: {
@@ -70,10 +68,8 @@ export function createMockOtherUserContext(
 	email = "other@example.com",
 	name = "Other User"
 ): AuthContext {
-	const now = /* @__PURE__ */ new Date();
-	const expiresAt = /* @__PURE__ */ new Date(
-		now.getTime() + 24 * 60 * 60 * 1000
-	);
+	const now = new Date();
+	const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
 	return {
 		session: {
