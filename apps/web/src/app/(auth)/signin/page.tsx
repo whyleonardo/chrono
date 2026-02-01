@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "@/lib/auth-client";
 
-export default function SignInPage() {
+export function SignInClientPage() {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [showEmailForm, setShowEmailForm] = useState(false);
 	const [email, setEmail] = useState("");
@@ -731,4 +731,11 @@ export default function SignInPage() {
 			</div>
 		</div>
 	);
+}
+
+import { requireGuest } from "@/lib/auth-guard";
+
+export default async function SignInPage() {
+	await requireGuest();
+	return <SignInClientPage />;
 }

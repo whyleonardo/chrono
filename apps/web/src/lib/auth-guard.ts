@@ -8,7 +8,7 @@ export async function requireAuth() {
 	});
 
 	if (!session) {
-		redirect("/auth/signin");
+		redirect("/signin");
 	}
 
 	return session;

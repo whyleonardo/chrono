@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { signUp } from "@/lib/auth-client";
 
-export default function SignUpPage() {
+export function SignUpClientPage() {
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
@@ -681,4 +681,11 @@ export default function SignUpPage() {
 			</div>
 		</div>
 	);
+}
+
+import { requireGuest } from "@/lib/auth-guard";
+
+export default async function SignUpPage() {
+	await requireGuest();
+	return <SignUpClientPage />;
 }
