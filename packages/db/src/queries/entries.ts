@@ -20,6 +20,7 @@ export interface UpdateEntryInput {
 	moods?: Mood[];
 	dominantMood?: Mood | null;
 	isBragWorthy?: boolean;
+	date?: string;
 	aiFeedback?: string;
 	aiSuggestedBullets?: string[];
 	aiBragWorthySuggestion?: {
@@ -269,6 +270,7 @@ export async function updateEntry(
 			...(input.isBragWorthy !== undefined && {
 				isBragWorthy: input.isBragWorthy,
 			}),
+			...(input.date !== undefined && { date: input.date }),
 			...(input.aiFeedback !== undefined && { aiFeedback: input.aiFeedback }),
 			...(input.aiSuggestedBullets !== undefined && {
 				aiSuggestedBullets: input.aiSuggestedBullets,

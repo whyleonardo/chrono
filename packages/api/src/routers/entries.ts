@@ -1,4 +1,11 @@
-import { db, entries } from "@chrono/db";
+import {
+	createEntry as createEntryQuery,
+	deleteEntry as deleteEntryQuery,
+	getEntryById,
+	listEntries as listEntriesQuery,
+	toggleBragWorthy as toggleBragWorthyQuery,
+	updateEntry as updateEntryQuery,
+} from "@chrono/db/queries/entries";
 import type { Entry } from "@chrono/types/entry";
 import {
 	CreateEntryInputSchema,
@@ -9,7 +16,6 @@ import {
 	UpdateEntryInputSchema,
 } from "@chrono/types/entry";
 import { ORPCError } from "@orpc/server";
-import { and, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { protectedProcedure } from "../procedures";
 import {
 	calculateDominantMood,
@@ -41,18 +47,15 @@ export const createEntry = protectedProcedure
 			});
 		}
 
-		const [entry] = await db
-			.insert(entries)
-			.values({
-				userId,
-				title: title === undefined ? null : title,
-				content,
-				moods: extractedMoods,
-				dominantMood,
-				date: dateString,
-				isBragWorthy: false,
-			})
-			.returning();
+		const entry = await createEntryQuery({
+			userId,
+			date: dateString,
+			title,
+			content,
+			moods: extractedMoods,
+			dominantMood,
+			isBragWorthy: false,
+		});
 
 		if (!entry) {
 			throw new ORPCError("INTERNAL_ERROR", {
@@ -74,54 +77,30 @@ export const listEntries = protectedProcedure
 		const { startDate, endDate, mood, bragWorthy, limit, offset } = input;
 		const userId = context.session.user.id;
 
-		// Build where conditions dynamically
-		const conditions = [eq(entries.userId, userId)];
+		// Format date strings for query
+		const formattedStartDate = startDate
+			? new Date(startDate).toISOString().split("T")[0]
+			: undefined;
+		const formattedEndDate = endDate
+			? new Date(endDate).toISOString().split("T")[0]
+			: undefined;
 
-		if (startDate) {
-			const startDateString = new Date(startDate).toISOString().split("T")[0];
-			if (startDateString) {
-				conditions.push(gte(entries.date, startDateString));
-			}
-		}
-
-		if (endDate) {
-			const endDateString = new Date(endDate).toISOString().split("T")[0];
-			if (endDateString) {
-				conditions.push(lte(entries.date, endDateString));
-			}
-		}
-
-		if (mood) {
-			// Use GIN index for array contains
-			conditions.push(sql`${entries.moods} @> ARRAY[${mood}]::mood[]`);
-		}
-
-		if (bragWorthy !== undefined) {
-			conditions.push(eq(entries.isBragWorthy, bragWorthy));
-		}
-
-		const results = await db
-			.select({
-				id: entries.id,
-				userId: entries.userId,
-				date: entries.date,
-				title: entries.title,
-				content: entries.content,
-				moods: entries.moods,
-				dominantMood: entries.dominantMood,
-				isBragWorthy: entries.isBragWorthy,
-				aiFeedback: entries.aiFeedback,
-				aiSuggestedBullets: entries.aiSuggestedBullets,
-				aiBragWorthySuggestion: entries.aiBragWorthySuggestion,
-				aiAnalyzedAt: entries.aiAnalyzedAt,
-				createdAt: entries.createdAt,
-				updatedAt: entries.updatedAt,
-			})
-			.from(entries)
-			.where(and(...conditions))
-			.orderBy(desc(entries.date))
-			.limit(limit)
-			.offset(offset);
+		const results = await listEntriesQuery(
+			userId,
+			{
+				startDate: formattedStartDate,
+				endDate: formattedEndDate,
+				mood: mood as
+					| "flow"
+					| "buggy"
+					| "learning"
+					| "meetings"
+					| "standard"
+					| undefined,
+				bragWorthy,
+			},
+			{ limit, offset }
+		);
 
 		return results as Entry[];
 	});
@@ -136,9 +115,7 @@ export const getEntry = protectedProcedure
 		const { id } = input;
 		const userId = context.session.user.id;
 
-		const entry = await db.query.entries.findFirst({
-			where: and(eq(entries.id, id), eq(entries.userId, userId)),
-		});
+		const entry = await getEntryById(id, userId);
 
 		if (!entry) {
 			throw new ORPCError("NOT_FOUND", {
@@ -161,7 +138,7 @@ export const updateEntry = protectedProcedure
 		const userId = context.session.user.id;
 
 		// Re-extract moods if content changed
-		const updateData: Record<string, unknown> = {};
+		const updateData: Parameters<typeof updateEntryQuery>[2] = {};
 
 		if (updates.title !== undefined) {
 			updateData.title = updates.title;
@@ -187,14 +164,7 @@ export const updateEntry = protectedProcedure
 			});
 		}
 
-		const [entry] = await db
-			.update(entries)
-			.set({
-				...updateData,
-				updatedAt: new Date(),
-			})
-			.where(and(eq(entries.id, id), eq(entries.userId, userId)))
-			.returning();
+		const entry = await updateEntryQuery(id, userId, updateData);
 
 		if (!entry) {
 			throw new ORPCError("NOT_FOUND", {
@@ -216,12 +186,9 @@ export const deleteEntry = protectedProcedure
 		const { id } = input;
 		const userId = context.session.user.id;
 
-		const result = await db
-			.delete(entries)
-			.where(and(eq(entries.id, id), eq(entries.userId, userId)))
-			.returning();
+		const result = await deleteEntryQuery(id, userId);
 
-		if (result.length === 0) {
+		if (!result) {
 			throw new ORPCError("NOT_FOUND", {
 				message: "Entry not found",
 				status: 404,
@@ -241,11 +208,7 @@ export const toggleBragWorthy = protectedProcedure
 		const { id, isBragWorthy } = input;
 		const userId = context.session.user.id;
 
-		const [entry] = await db
-			.update(entries)
-			.set({ isBragWorthy })
-			.where(and(eq(entries.id, id), eq(entries.userId, userId)))
-			.returning();
+		const entry = await toggleBragWorthyQuery(id, userId, isBragWorthy);
 
 		if (!entry) {
 			throw new ORPCError("NOT_FOUND", {
