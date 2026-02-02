@@ -7,9 +7,7 @@ export default async function SignInPage() {
 
 	return (
 		<div className="flex min-h-screen w-full">
-			{/* Left Panel - Testimonial/Brand */}
 			<div className="relative hidden flex-col items-center justify-center bg-neutral-100 p-12 lg:flex lg:w-1/2 dark:bg-[#0a0a0a]">
-				{/* Subtle noise texture overlay */}
 				<div
 					className="pointer-events-none absolute inset-0 opacity-[0.02] dark:opacity-[0.03]"
 					style={{
@@ -19,7 +17,6 @@ export default async function SignInPage() {
 
 				<TimeFlowAnimation />
 
-				{/* Logo */}
 				<div className="absolute top-8 left-8">
 					<svg
 						className="h-8 w-8 text-foreground"
@@ -38,7 +35,6 @@ export default async function SignInPage() {
 					</svg>
 				</div>
 
-				{/* Testimonial Content */}
 				<div className="relative z-10 max-w-md text-center">
 					<p className="mb-8 text-foreground/90 text-xl leading-relaxed">
 						<span className="font-medium text-foreground">
@@ -60,11 +56,9 @@ export default async function SignInPage() {
 					</div>
 				</div>
 
-				{/* Decorative gradient orb */}
 				<div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-primary/5 to-transparent" />
 			</div>
 
-			{/* Right Panel - Auth Form */}
 			<div className="relative flex w-full flex-col items-center justify-center bg-background p-6 lg:w-1/2 lg:p-12">
 				<SignInForm />
 			</div>
