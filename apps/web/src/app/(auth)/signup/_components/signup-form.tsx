@@ -83,7 +83,7 @@ export function SignUpForm() {
 			{error && (
 				<motion.div
 					animate={{ opacity: 1, y: 0 }}
-					className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-red-600 text-sm dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400"
+					className="mb-4 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive text-sm"
 					initial={{ opacity: 0, y: -10 }}
 				>
 					{error}
