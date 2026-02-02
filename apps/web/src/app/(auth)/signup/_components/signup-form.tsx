@@ -13,7 +13,7 @@ export function SignUpForm() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.ChangeEvent) => {
 		e.preventDefault();
 		setError(null);
 

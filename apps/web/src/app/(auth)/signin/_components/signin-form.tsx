@@ -11,7 +11,7 @@ export function SignInForm() {
 	const [password, setPassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.ChangeEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
 
