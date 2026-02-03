@@ -52,11 +52,11 @@ describe("entries queries", () => {
 
 			const entry = await createEntry(input);
 
-      expect(entry).toBeDefined();
+			expect(entry).toBeDefined();
 
 			if (!entry) {
 				return;
-      }
+			}
 
 			expect(entry.userId).toBe(TEST_USER_ID);
 			expect(entry.title).toBe("Test Entry");
@@ -96,7 +96,7 @@ describe("entries queries", () => {
 				content: { type: "doc", content: [] },
 				moods: ["flow"] as Mood[],
 			});
-      expect(created).toBeDefined();
+			expect(created).toBeDefined();
 
 			if (!created) {
 				return;
@@ -124,7 +124,7 @@ describe("entries queries", () => {
 				content: { type: "doc", content: [] },
 				moods: [] as Mood[],
 			});
-      expect(created).toBeDefined();
+			expect(created).toBeDefined();
 
 			if (!created) {
 				return;
@@ -153,11 +153,11 @@ describe("entries queries", () => {
 
 			const userEntries = await getEntriesByUser(TEST_USER_ID);
 
-      expect(userEntries).toHaveLength(2);
+			expect(userEntries).toHaveLength(2);
 
-      if (userEntries[0]) {
+			if (userEntries[0]) {
 				expect(userEntries[0].date).toBe("2026-01-31");
-      }
+			}
 
 			if (userEntries[1]) {
 				expect(userEntries[1].date).toBe("2026-01-30");
@@ -199,9 +199,9 @@ describe("entries queries", () => {
 				"2026-01-22"
 			);
 
-      expect(rangeEntries).toHaveLength(1);
+			expect(rangeEntries).toHaveLength(1);
 
-      if (rangeEntries[0]) {
+			if (rangeEntries[0]) {
 				expect(rangeEntries[0].date).toBe("2026-01-20");
 			}
 		});
@@ -338,7 +338,7 @@ describe("entries queries", () => {
 
 			expect(heatmap).toHaveLength(1);
 
-      if (heatmap[0]) {
+			if (heatmap[0]) {
 				expect(heatmap[0].date).toBe("2026-01-20");
 				expect(heatmap[0].entryCount).toBe(2);
 				expect(heatmap[0].hasBragWorthy).toBe(true);
@@ -358,9 +358,9 @@ describe("entries queries", () => {
 				isBragWorthy: false,
 			});
 
-      expect(created).toBeDefined();
+			expect(created).toBeDefined();
 
-      if (!created) {
+			if (!created) {
 				return;
 			}
 
@@ -399,9 +399,9 @@ describe("entries queries", () => {
 				moods: [] as Mood[],
 			});
 
-      expect(created).toBeDefined();
+			expect(created).toBeDefined();
 
-      if (!created) {
+			if (!created) {
 				return;
 			}
 
@@ -412,7 +412,7 @@ describe("entries queries", () => {
 
 			const entry = await getEntryById(created.id, TEST_USER_ID);
 
-      expect(entry).toBeNull();
+			expect(entry).toBeNull();
 		});
 
 		it("should return null for non-existent entry", async () => {
@@ -421,7 +421,7 @@ describe("entries queries", () => {
 				TEST_USER_ID
 			);
 
-      expect(deleted).toBeNull();
+			expect(deleted).toBeNull();
 		});
 	});
 });
