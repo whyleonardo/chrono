@@ -1,42 +1,61 @@
 "use client";
 
+import { AnimatedArrowButton } from "@chrono/ui/components/animated-arrow-button";
+import { EmailInput } from "@chrono/ui/components/email-input";
+import { PasswordInput } from "@chrono/ui/components/password-input";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { signUp } from "@/lib/auth-client";
 
 export function SignUpForm() {
+	const router = useRouter();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string | null>(null);
 
-	const handleSubmit = async (e: React.ChangeEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		setError(null);
 
 		if (password !== confirmPassword) {
-			setError("Passwords do not match");
+			toast.error("Passwords do not match");
 			return;
 		}
 
 		if (!name.trim()) {
-			setError("Name is required");
+			toast.error("Name is required");
+			return;
+		}
+
+		if (password.length < 8) {
+			toast.error("Password must be at least 8 characters");
 			return;
 		}
 
 		setIsLoading(true);
 
-		await signUp.email({
-			email,
-			password,
-			name,
-			callbackURL: "/dashboard",
-		});
-
-		setIsLoading(false);
+		try {
+			await signUp.email({
+				email,
+				password,
+				name,
+				callbackURL: "/dashboard",
+			});
+			toast.success("Account created!", {
+				description: "Redirecting to dashboard...",
+			});
+			router.push("/dashboard");
+		} catch (error) {
+			toast.error(
+				error instanceof Error ? error.message : "Failed to create account"
+			);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -79,17 +98,6 @@ export function SignUpForm() {
 				</p>
 			</div>
 
-			{/* Error Message */}
-			{error && (
-				<motion.div
-					animate={{ opacity: 1, y: 0 }}
-					className="mb-4 rounded-md border border-destructive/20 bg-destructive/10 p-3 text-destructive text-sm"
-					initial={{ opacity: 0, y: -10 }}
-				>
-					{error}
-				</motion.div>
-			)}
-
 			{/* Email Form */}
 			<form className="space-y-4" onSubmit={handleSubmit}>
 				<div>
@@ -117,13 +125,12 @@ export function SignUpForm() {
 					>
 						Email
 					</label>
-					<input
-						className="h-11 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+					<EmailInput
+						autoComplete="email"
 						id="email"
 						onChange={(e) => setEmail(e.target.value)}
 						placeholder="you@example.com"
 						required
-						type="email"
 						value={email}
 					/>
 				</div>
@@ -135,13 +142,12 @@ export function SignUpForm() {
 					>
 						Password
 					</label>
-					<input
-						className="h-11 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+					<PasswordInput
+						autoComplete="new-password"
 						id="password"
 						onChange={(e) => setPassword(e.target.value)}
 						placeholder="••••••••"
 						required
-						type="password"
 						value={password}
 					/>
 				</div>
@@ -153,23 +159,20 @@ export function SignUpForm() {
 					>
 						Confirm Password
 					</label>
-					<input
-						className="h-11 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+					<PasswordInput
+						autoComplete="new-password"
 						id="confirmPassword"
 						onChange={(e) => setConfirmPassword(e.target.value)}
 						placeholder="••••••••"
 						required
-						type="password"
 						value={confirmPassword}
 					/>
 				</div>
 
-				<motion.button
-					className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary font-medium text-primary-foreground transition-all duration-200 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+				<AnimatedArrowButton
+					className="h-11 w-full"
 					disabled={isLoading}
 					type="submit"
-					whileHover={{ scale: 1.01 }}
-					whileTap={{ scale: 0.99 }}
 				>
 					{isLoading ? (
 						<motion.div
@@ -184,7 +187,7 @@ export function SignUpForm() {
 					) : (
 						<span>Create Account</span>
 					)}
-				</motion.button>
+				</AnimatedArrowButton>
 			</form>
 
 			{/* Sign In Link */}
