@@ -1,11 +1,17 @@
 "use client";
 
+import { AnimatedArrowButton } from "@chrono/ui/components/animated-arrow-button";
+import { EmailInput } from "@chrono/ui/components/email-input";
+import { PasswordInput } from "@chrono/ui/components/password-input";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { signIn } from "@/lib/auth-client";
 
 export function SignInForm() {
+	const router = useRouter();
 	const [showEmailForm, setShowEmailForm] = useState(false);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -15,13 +21,24 @@ export function SignInForm() {
 		e.preventDefault();
 		setIsLoading(true);
 
-		await signIn.email({
-			email,
-			password,
-			callbackURL: "/dashboard",
-		});
+		try {
+			await signIn.email({
+				email,
+				password,
+				callbackURL: "/dashboard",
+			});
 
-		setIsLoading(false);
+			toast.success("Welcome back!", {
+				description: "You have been signed in successfully",
+			});
+			router.push("/dashboard");
+		} catch (err) {
+			const error = err as Error;
+			toast.error("Sign in failed", {
+				description: error.message || "Please check your credentials",
+			});
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -100,12 +117,12 @@ export function SignInForm() {
 							>
 								Email
 							</label>
-							<input
-								className="h-11 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+							<EmailInput
+								autoComplete="email"
 								id="email"
 								onChange={(e) => setEmail(e.target.value)}
 								placeholder="you@example.com"
-								type="email"
+								required
 								value={email}
 							/>
 						</div>
@@ -117,22 +134,20 @@ export function SignInForm() {
 							>
 								Password
 							</label>
-							<input
-								className="h-11 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+							<PasswordInput
+								autoComplete="current-password"
 								id="password"
 								onChange={(e) => setPassword(e.target.value)}
 								placeholder="••••••••"
-								type="password"
+								required
 								value={password}
 							/>
 						</div>
 
-						<motion.button
-							className="flex h-11 w-full items-center justify-center gap-2 rounded-md bg-primary font-medium text-primary-foreground transition-all duration-200 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+						<AnimatedArrowButton
+							className="h-11 w-full"
 							disabled={isLoading}
 							type="submit"
-							whileHover={{ scale: 1.01 }}
-							whileTap={{ scale: 0.99 }}
 						>
 							{isLoading ? (
 								<motion.div
@@ -147,7 +162,7 @@ export function SignInForm() {
 							) : (
 								<span>Sign In</span>
 							)}
-						</motion.button>
+						</AnimatedArrowButton>
 					</form>
 				</>
 			) : (
