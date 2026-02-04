@@ -1,5 +1,5 @@
+import { Plasma } from "@/components/plasma";
 import { requireGuest } from "@/lib/auth-guard";
-import { TimeFlowAnimation } from "../_components/time-flow-animation";
 import { SignInForm } from "./_components/signin-form";
 
 export default async function SignInPage() {
@@ -8,16 +8,11 @@ export default async function SignInPage() {
 	return (
 		<div className="flex min-h-screen w-full">
 			<div className="relative hidden flex-col items-center justify-center bg-neutral-100 p-12 lg:flex lg:w-1/2 dark:bg-[#0a0a0a]">
-				<div
-					className="pointer-events-none absolute inset-0 opacity-[0.02] dark:opacity-[0.03]"
-					style={{
-						backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-					}}
-				/>
+				<div className="absolute inset-0">
+					<Plasma color="#d4a574" opacity={0.6} speed={0.3} />
+				</div>
 
-				<TimeFlowAnimation />
-
-				<div className="absolute top-8 left-8">
+				<div className="absolute top-8 left-8 z-10">
 					<svg
 						className="h-8 w-8 text-foreground"
 						fill="none"
@@ -55,8 +50,6 @@ export default async function SignInPage() {
 						</div>
 					</div>
 				</div>
-
-				<div className="pointer-events-none absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-primary/5 to-transparent" />
 			</div>
 
 			<div className="relative flex w-full flex-col items-center justify-center bg-background p-6 lg:w-1/2 lg:p-12">
