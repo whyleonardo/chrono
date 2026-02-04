@@ -2,8 +2,8 @@
 
 import { AnimatedArrowButton } from "@chrono/ui/components/animated-arrow-button";
 import { EmailInput } from "@chrono/ui/components/email-input";
+import { Input } from "@chrono/ui/components/input";
 import { PasswordInput } from "@chrono/ui/components/password-input";
-import { motion } from "motion/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -59,19 +59,9 @@ export function SignUpForm() {
 	};
 
 	return (
-		<motion.div
-			animate={{ opacity: 1, y: 0 }}
-			className="w-full max-w-sm"
-			initial={{ opacity: 0, y: 20 }}
-			transition={{ duration: 0.6, delay: 0.3 }}
-		>
+		<div className="w-full max-w-sm">
 			{/* Mobile Logo */}
-			<motion.div
-				animate={{ opacity: 1 }}
-				className="absolute top-8 left-8 lg:hidden"
-				initial={{ opacity: 0 }}
-				transition={{ duration: 0.5 }}
-			>
+			<div className="absolute top-8 left-8 lg:hidden">
 				<svg
 					className="h-7 w-7 text-foreground"
 					fill="none"
@@ -83,7 +73,7 @@ export function SignUpForm() {
 					<circle cx="12" cy="12" r="10" />
 					<path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round" />
 				</svg>
-			</motion.div>
+			</div>
 
 			{/* Header */}
 			<div className="mb-10 text-center">
@@ -107,8 +97,8 @@ export function SignUpForm() {
 					>
 						Name
 					</label>
-					<input
-						className="h-11 w-full rounded-md border border-border bg-background px-3 text-foreground placeholder-muted-foreground transition-all focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/20"
+					<Input
+						autoComplete="name"
 						id="name"
 						onChange={(e) => setName(e.target.value)}
 						placeholder="Your name"
@@ -170,20 +160,12 @@ export function SignUpForm() {
 				</div>
 
 				<AnimatedArrowButton
-					className="h-11 w-full"
+					className="w-full"
 					disabled={isLoading}
 					type="submit"
 				>
 					{isLoading ? (
-						<motion.div
-							animate={{ rotate: 360 }}
-							className="h-5 w-5 rounded-full border-2 border-primary-foreground border-t-transparent"
-							transition={{
-								duration: 1,
-								repeat: Number.POSITIVE_INFINITY,
-								ease: "linear",
-							}}
-						/>
+						<div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground border-t-transparent" />
 					) : (
 						<span>Create Account</span>
 					)}
@@ -191,12 +173,7 @@ export function SignUpForm() {
 			</form>
 
 			{/* Sign In Link */}
-			<motion.div
-				animate={{ opacity: 1 }}
-				className="mt-6 text-center"
-				initial={{ opacity: 0 }}
-				transition={{ duration: 0.5, delay: 0.5 }}
-			>
+			<div className="mt-6 text-center">
 				<p className="text-muted-foreground text-sm">
 					Already have an account?{" "}
 					<Link
@@ -206,15 +183,10 @@ export function SignUpForm() {
 						Sign in
 					</Link>
 				</p>
-			</motion.div>
+			</div>
 
 			{/* Footer */}
-			<motion.p
-				animate={{ opacity: 1 }}
-				className="absolute right-0 bottom-8 left-0 px-6 text-center text-muted-foreground text-xs"
-				initial={{ opacity: 0 }}
-				transition={{ duration: 0.5, delay: 0.6 }}
-			>
+			<p className="absolute right-0 bottom-8 left-0 px-6 text-center text-muted-foreground text-xs">
 				By signing up you agree to our{" "}
 				<button
 					className="text-foreground underline transition-colors hover:text-primary"
@@ -229,7 +201,7 @@ export function SignUpForm() {
 				>
 					Privacy policy
 				</button>
-			</motion.p>
-		</motion.div>
+			</p>
+		</div>
 	);
 }
