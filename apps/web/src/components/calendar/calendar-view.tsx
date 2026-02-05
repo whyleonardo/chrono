@@ -22,10 +22,11 @@ const weekdayLabels = [
 
 const dayContentBaseClassName = "flex h-full flex-col justify-between";
 
-type DayContentComponent = (props: { date: Date }) => React.JSX.Element;
+interface DayContentProps {
+	date: Date;
+}
 
-const CalendarDayContent = ((props: { date: Date }) => {
-	const { date } = props;
+const CalendarDayContent = ({ date }: DayContentProps) => {
 	const summary = getEntrySummaryByDate(format(date, "yyyy-MM-dd"));
 
 	return (
@@ -39,7 +40,7 @@ const CalendarDayContent = ((props: { date: Date }) => {
 			) : null}
 		</div>
 	);
-}) satisfies DayContentComponent;
+};
 
 export function CalendarView() {
 	const [month, setMonth] = useState(new Date(2026, 1, 1));
@@ -53,11 +54,9 @@ export function CalendarView() {
 		return getEntrySummaryByDate(format(selectedDate, "yyyy-MM-dd"));
 	}, [selectedDate]);
 
-	const dayPickerComponents: DayPickerProps["components"] & {
-		DayContent: DayContentComponent;
-	} = {
+	const dayPickerComponents = {
 		DayContent: CalendarDayContent,
-	};
+	} as DayPickerProps["components"];
 
 	return (
 		<section className="relative flex h-full flex-col gap-6 bg-neutral-950 text-neutral-50">
@@ -127,7 +126,7 @@ export function CalendarView() {
 						head: "hidden",
 						row: "",
 						cell: "h-[120px] align-top",
-						day: "relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-all duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
+						day: "relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
 						day_today: "border-neutral-500/80 bg-neutral-900",
 						day_selected: "border-blue-500/80 bg-blue-950/40 text-blue-200",
 						day_outside: "opacity-40",
