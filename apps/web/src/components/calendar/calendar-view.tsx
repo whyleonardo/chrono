@@ -4,6 +4,7 @@ import { Button } from "@chrono/ui/components/button";
 import { format } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import type { DayContentProps, DayPickerProps } from "react-day-picker";
 import { DayPicker } from "react-day-picker";
 
 import { getEntrySummaryByDate } from "./calendar-data";
@@ -30,6 +31,25 @@ export function CalendarView() {
 
 		return getEntrySummaryByDate(format(selectedDate, "yyyy-MM-dd"));
 	}, [selectedDate]);
+
+	const dayPickerComponents = {
+		DayContent: (props: DayContentProps) => {
+			const summary = getEntrySummaryByDate(format(props.date, "yyyy-MM-dd"));
+			return (
+				<div className="flex h-full flex-col justify-between">
+					<div className="text-base text-neutral-200">
+						{format(props.date, "d")}
+					</div>
+					{summary ? (
+						<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
+							<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+							<span>{summary.count} log</span>
+						</div>
+					) : null}
+				</div>
+			);
+		},
+	} as unknown as NonNullable<DayPickerProps["components"]>;
 
 	return (
 		<section className="relative flex h-full flex-col gap-6 bg-neutral-950 text-neutral-50">
@@ -104,28 +124,7 @@ export function CalendarView() {
 						day_selected: "border-blue-500/80 bg-blue-950/40 text-blue-200",
 						day_outside: "opacity-40",
 					}}
-					components={
-						{
-							DayContent: (props: { date: Date }) => {
-								const summary = getEntrySummaryByDate(
-									format(props.date, "yyyy-MM-dd")
-								);
-								return (
-									<div className="flex h-full flex-col justify-between">
-										<div className="text-base text-neutral-200">
-											{format(props.date, "d")}
-										</div>
-										{summary ? (
-											<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
-												<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-												<span>{summary.count} log</span>
-											</div>
-										) : null}
-									</div>
-								);
-							},
-						} as const
-					}
+					components={dayPickerComponents}
 					mode="single"
 					month={month}
 					onMonthChange={setMonth}
