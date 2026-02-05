@@ -1,8 +1,8 @@
-export interface EntrySummary {
+export type EntrySummary = {
 	date: string;
 	count: number;
 	mood: "calm" | "focused" | "low" | "joy" | "neutral";
-}
+};
 
 export const mockEntries: EntrySummary[] = [
 	{ date: "2026-02-01", count: 1, mood: "neutral" },
