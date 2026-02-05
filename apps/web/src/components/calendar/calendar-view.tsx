@@ -1,11 +1,10 @@
 "use client";
-"use client";
 
 import { Button } from "@chrono/ui/components/button";
 import { format } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { type ComponentProps, useMemo, useState } from "react";
-import { type DayButton, DayPicker } from "react-day-picker";
+import { useMemo, useState } from "react";
+import { DayPicker } from "react-day-picker";
 
 import { getEntrySummaryByDate } from "./calendar-data";
 import { DayDetailDialog } from "./day-detail-dialog";
@@ -20,26 +19,6 @@ const weekdayLabels = [
 	"Sat",
 ] as const;
 
-function CalendarDayButton(props: ComponentProps<typeof DayButton>) {
-	const { day, className, ...buttonProps } = props;
-	const summary = getEntrySummaryByDate(format(day.date, "yyyy-MM-dd"));
-	return (
-		<button className={className} {...buttonProps}>
-			<div className="flex h-full flex-col justify-between">
-				<div className="text-base text-neutral-200">
-					{format(day.date, "d")}
-				</div>
-				{summary ? (
-					<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
-						<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-						<span>{summary.count} log</span>
-					</div>
-				) : null}
-			</div>
-		</button>
-	);
-}
-
 export function CalendarView() {
 	const [month, setMonth] = useState(new Date(2026, 1, 1));
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -48,6 +27,7 @@ export function CalendarView() {
 		if (!selectedDate) {
 			return undefined;
 		}
+
 		return getEntrySummaryByDate(format(selectedDate, "yyyy-MM-dd"));
 	}, [selectedDate]);
 
@@ -124,9 +104,28 @@ export function CalendarView() {
 						day_selected: "border-blue-500/80 bg-blue-950/40 text-blue-200",
 						day_outside: "opacity-40",
 					}}
-					components={{
-						DayButton: CalendarDayButton,
-					}}
+					components={
+						{
+							DayContent: (props: { date: Date }) => {
+								const summary = getEntrySummaryByDate(
+									format(props.date, "yyyy-MM-dd")
+								);
+								return (
+									<div className="flex h-full flex-col justify-between">
+										<div className="text-base text-neutral-200">
+											{format(props.date, "d")}
+										</div>
+										{summary ? (
+											<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
+												<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+												<span>{summary.count} log</span>
+											</div>
+										) : null}
+									</div>
+								);
+							},
+						} as const
+					}
 					mode="single"
 					month={month}
 					onMonthChange={setMonth}
