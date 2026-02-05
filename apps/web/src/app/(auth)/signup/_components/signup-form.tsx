@@ -77,10 +77,7 @@ export function SignUpForm() {
 
 			{/* Header */}
 			<div className="mb-10 text-center">
-				<h1
-					className="mb-2 font-medium text-2xl"
-					style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-				>
+				<h1 className="mb-2 font-medium font-serif text-2xl">
 					Create your account
 				</h1>
 				<p className="text-muted-foreground text-sm">
@@ -98,6 +95,7 @@ export function SignUpForm() {
 						Name
 					</label>
 					<Input
+						aria-describedby="name-error"
 						autoComplete="name"
 						id="name"
 						onChange={(e) => setName(e.target.value)}
@@ -116,6 +114,7 @@ export function SignUpForm() {
 						Email
 					</label>
 					<EmailInput
+						aria-describedby="email-error"
 						autoComplete="email"
 						id="email"
 						onChange={(e) => setEmail(e.target.value)}
@@ -133,6 +132,7 @@ export function SignUpForm() {
 						Password
 					</label>
 					<PasswordInput
+						aria-describedby="password-error"
 						autoComplete="new-password"
 						id="password"
 						onChange={(e) => setPassword(e.target.value)}
@@ -150,6 +150,7 @@ export function SignUpForm() {
 						Confirm Password
 					</label>
 					<PasswordInput
+						aria-describedby="confirmPassword-error"
 						autoComplete="new-password"
 						id="confirmPassword"
 						onChange={(e) => setConfirmPassword(e.target.value)}

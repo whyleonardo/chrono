@@ -60,12 +60,7 @@ export function SignInForm() {
 
 			{/* Header */}
 			<div className="mb-10 text-center">
-				<h1
-					className="mb-2 font-medium text-2xl"
-					style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-				>
-					Welcome back
-				</h1>
+				<h1 className="mb-2 font-medium font-serif text-2xl">Welcome back</h1>
 				<p className="text-muted-foreground text-sm">
 					Sign in to continue your journey
 				</p>
@@ -74,11 +69,10 @@ export function SignInForm() {
 			{showEmailForm ? (
 				<>
 					{/* Back Button */}
-					<Button
+					<button
 						className="mb-6 flex items-center gap-1 text-muted-foreground text-sm transition-colors hover:text-foreground"
 						onClick={() => setShowEmailForm(false)}
-						size="icon-xs"
-						variant="ghost"
+						type="button"
 					>
 						<svg
 							className="h-4 w-4"
@@ -95,7 +89,7 @@ export function SignInForm() {
 							/>
 						</svg>
 						Back
-					</Button>
+					</button>
 
 					{/* Email Form */}
 					<form className="space-y-4" onSubmit={handleSubmit}>
@@ -107,6 +101,7 @@ export function SignInForm() {
 								Email
 							</label>
 							<EmailInput
+								aria-describedby="email-error"
 								autoComplete="email"
 								id="email"
 								onChange={(e) => setEmail(e.target.value)}
@@ -124,6 +119,7 @@ export function SignInForm() {
 								Password
 							</label>
 							<PasswordInput
+								aria-describedby="password-error"
 								autoComplete="current-password"
 								id="password"
 								onChange={(e) => setPassword(e.target.value)}
