@@ -28,7 +28,7 @@
         "typescript": "catalog:",
         "ultracite": "7.1.1",
         "vitest": "^3.0.0",
-        "web": "workspace:*",
+        "web": "^0.0.2",
       },
     },
     "apps/web": {
