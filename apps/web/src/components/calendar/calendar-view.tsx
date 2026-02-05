@@ -3,8 +3,8 @@
 import { Button } from "@chrono/ui/components/button";
 import { format } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { DayButtonProps, DayPickerProps } from "react-day-picker";
+import { useMemo, useState } from "react";
+import type { DayPickerProps } from "react-day-picker";
 import { DayPicker } from "react-day-picker";
 
 import { getEntrySummaryByDate } from "./calendar-data";
@@ -20,34 +20,26 @@ const weekdayLabels = [
 	"Sat",
 ] as const;
 
-const dayButtonBaseClassName = "flex h-full flex-col justify-between";
+const dayContentBaseClassName = "flex h-full flex-col justify-between";
 
-const CalendarDayButton = (props: DayButtonProps) => {
-	const { day, className, modifiers, ...buttonProps } = props;
-	const buttonRef = useRef<HTMLButtonElement>(null);
-	const summary = getEntrySummaryByDate(format(day.date, "yyyy-MM-dd"));
-	const mergedClassName = className
-		? `${dayButtonBaseClassName} ${className}`
-		: dayButtonBaseClassName;
+type DayContentComponent = (props: { date: Date }) => React.JSX.Element;
 
-	useEffect(() => {
-		if (modifiers.focused) {
-			buttonRef.current?.focus();
-		}
-	}, [modifiers.focused]);
+const CalendarDayContent = ((props: { date: Date }) => {
+	const { date } = props;
+	const summary = getEntrySummaryByDate(format(date, "yyyy-MM-dd"));
 
 	return (
-		<button {...buttonProps} className={mergedClassName} ref={buttonRef}>
-			<div className="text-base text-neutral-200">{format(day.date, "d")}</div>
+		<div className={dayContentBaseClassName}>
+			<div className="text-base text-neutral-200">{format(date, "d")}</div>
 			{summary ? (
 				<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
 					<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
 					<span>{summary.count} log</span>
 				</div>
 			) : null}
-		</button>
+		</div>
 	);
-};
+}) satisfies DayContentComponent;
 
 export function CalendarView() {
 	const [month, setMonth] = useState(new Date(2026, 1, 1));
@@ -61,9 +53,11 @@ export function CalendarView() {
 		return getEntrySummaryByDate(format(selectedDate, "yyyy-MM-dd"));
 	}, [selectedDate]);
 
-	const dayPickerComponents = {
-		DayButton: CalendarDayButton,
-	} satisfies NonNullable<DayPickerProps["components"]>;
+	const dayPickerComponents: DayPickerProps["components"] & {
+		DayContent: DayContentComponent;
+	} = {
+		DayContent: CalendarDayContent,
+	};
 
 	return (
 		<section className="relative flex h-full flex-col gap-6 bg-neutral-950 text-neutral-50">
