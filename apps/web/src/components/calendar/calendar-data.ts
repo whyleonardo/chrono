@@ -1,8 +1,8 @@
-export type EntrySummary = {
+export interface EntrySummary {
 	date: string;
 	count: number;
 	mood: "calm" | "focused" | "low" | "joy" | "neutral";
-};
+}
 
 export const mockEntries: EntrySummary[] = [
 	{ date: "2026-02-01", count: 1, mood: "neutral" },
@@ -11,8 +11,6 @@ export const mockEntries: EntrySummary[] = [
 	{ date: "2026-02-04", count: 3, mood: "joy" },
 ];
 
-const entryMap = new Map(mockEntries.map((entry) => [entry.date, entry]));
-
-export function getEntrySummaryByDate(date: string) {
-	return entryMap.get(date);
+export function getEntrySummaryByDate(date: string): EntrySummary | undefined {
+	return new Map(mockEntries.map((entry) => [entry.date, entry])).get(date);
 }
