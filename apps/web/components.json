@@ -25,6 +25,7 @@
     "@hextaui": "https://hextaui.com/r/{name}.json",
     "@motion-primitives": "https://motion-primitives.com/c/{name}.json",
     "@lucide-animated": "https://lucide-animated.com/r/{name}.json",
-    "@react-bits": "https://reactbits.dev/r/{name}.json"
+    "@react-bits": "https://reactbits.dev/r/{name}.json",
+    "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json"
   }
 }

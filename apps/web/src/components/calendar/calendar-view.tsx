@@ -136,20 +136,20 @@ export function CalendarView() {
 				))}
 			</div>
 
-			<div className="flex-1 px-6 pb-6">
+			<div className="h-full flex-1 bg-red-500 px-6 pb-6">
 				<DayPicker
-					className="h-full w-full"
+					className="size-full"
 					classNames={{
-						root: "h-full w-full",
-						months: "h-full w-full",
-						month: "h-full w-full",
-						month_grid: "h-full w-full border-separate border-spacing-3",
+						root: "size-full",
+						months: "size-full",
+						month: "size-full",
+						month_grid: "size-full border-separate border-spacing-3",
 						head: "hidden",
 						weekdays: "hidden",
 						weekday: "hidden",
 						weeks: "grid h-full grid-rows-6",
 						week: "grid grid-cols-7",
-						row: "",
+						row: "size-full",
 						cell: "h-full align-top",
 						day: "h-full align-top",
 						day_button:
