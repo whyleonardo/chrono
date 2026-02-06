@@ -1,5 +1,6 @@
 import { db } from "@chrono/db";
 import * as schema from "@chrono/db/schema/auth";
+import { parseCorsOrigins } from "@chrono/env/cors";
 import { env } from "@chrono/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -11,7 +12,7 @@ export const auth = betterAuth({
 
 		schema,
 	}),
-	trustedOrigins: [env.CORS_ORIGIN],
+	trustedOrigins: parseCorsOrigins(env.CORS_ORIGIN),
 	emailAndPassword: {
 		enabled: true,
 	},
