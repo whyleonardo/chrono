@@ -35,8 +35,9 @@
     "db:down": "turbo -F @chrono/db db:down",
     "check": "ultracite check",
     "fix": "ultracite fix",
-    "test": "NODE_ENV=test vitest run && NODE_ENV=test vitest --config apps/web/vitest.config.ts run",
+    "test": "NODE_ENV=test vitest run --exclude apps/web/** && NODE_ENV=test vitest --config apps/web/vitest.config.ts run",
     "test:web": "NODE_ENV=test vitest --config apps/web/vitest.config.ts run",
+    "test:server": "NODE_ENV=test vitest run --exclude apps/web/**",
     "test:watch": "NODE_ENV=test vitest",
     "test:ui": "NODE_ENV=test vitest --ui",
     "test:unit": "NODE_ENV=test vitest run packages/api/src/utils"
