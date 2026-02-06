@@ -60,6 +60,13 @@ export function CalendarView() {
 
 	return (
 		<section className="relative flex h-full flex-col gap-6 bg-neutral-950 text-neutral-50">
+			<div
+				aria-hidden="true"
+				className="pointer-events-none absolute inset-0 opacity-60"
+			>
+				<div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.15),transparent_55%)]" />
+				<div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.1),transparent_45%)]" />
+			</div>
 			<header className="flex items-center justify-between px-6 pt-6">
 				<div>
 					<h2 className="font-semibold text-[32px] tracking-tight">
