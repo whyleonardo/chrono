@@ -147,10 +147,10 @@ export function CalendarView() {
 						head: "hidden",
 						weekdays: "hidden",
 						weekday: "hidden",
-						weeks: "h-full",
-						week: "",
+						weeks: "grid h-full grid-rows-6",
+						week: "grid grid-cols-7",
 						row: "",
-						cell: "h-[120px] align-top",
+						cell: "h-full align-top",
 						day: "h-full align-top",
 						day_button:
 							"relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
