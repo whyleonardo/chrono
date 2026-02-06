@@ -148,9 +148,13 @@ export function CalendarView() {
 						weekday: "hidden",
 						row: "",
 						cell: "h-[120px] align-top",
-						day: "relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
-						day_today: "border-neutral-500/80 bg-neutral-900",
-						day_selected: "border-blue-500/80 bg-blue-950/40 text-blue-200",
+						day: "align-top",
+						day_button:
+							"relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
+						day_today:
+							"[&>button]:border-neutral-500/80 [&>button]:bg-neutral-900",
+						day_selected:
+							"[&>button]:border-blue-500/80 [&>button]:bg-blue-950/40 [&>button]:text-blue-200",
 						day_outside: "opacity-40",
 					}}
 					components={dayPickerComponents}
