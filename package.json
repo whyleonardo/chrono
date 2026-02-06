@@ -25,6 +25,7 @@
     "check-types": "turbo check-types",
     "dev:native": "turbo -F native dev",
     "dev:web": "turbo -F web dev",
+    "preview": "bun run scripts/preview.ts",
     "db:push": "turbo -F @chrono/db db:push",
     "db:studio": "turbo -F @chrono/db db:studio",
     "db:generate": "turbo -F @chrono/db db:generate",
