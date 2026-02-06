@@ -4,7 +4,12 @@ import { Button } from "@chrono/ui/components/button";
 import { format } from "date-fns";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import type { DayPickerProps } from "react-day-picker";
+import type {
+	DayButtonProps,
+	DayPickerProps,
+	MonthCaptionProps,
+	NavProps,
+} from "react-day-picker";
 import { DayPicker } from "react-day-picker";
 
 import { getEntrySummaryByDate } from "./calendar-data";
@@ -22,25 +27,31 @@ const weekdayLabels = [
 
 const dayContentBaseClassName = "flex h-full flex-col justify-between";
 
-interface DayContentProps {
-	date: Date;
-}
-
-const CalendarDayContent = ({ date }: DayContentProps) => {
-	const summary = getEntrySummaryByDate(format(date, "yyyy-MM-dd"));
+const CalendarDayButton = (props: DayButtonProps) => {
+	const { day, children: _children, ...buttonProps } = props;
+	const summary = getEntrySummaryByDate(format(day.date, "yyyy-MM-dd"));
 
 	return (
-		<div className={dayContentBaseClassName}>
-			<div className="text-base text-neutral-200">{format(date, "d")}</div>
-			{summary ? (
-				<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
-					<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-					<span>{summary.count} log</span>
+		<button {...buttonProps}>
+			<div className={dayContentBaseClassName}>
+				<div className="text-base text-neutral-200">
+					{format(day.date, "d")}
 				</div>
-			) : null}
-		</div>
+				{summary ? (
+					<div className="mt-2 flex items-center gap-2 text-[10px] text-neutral-400">
+						<span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
+						<span>{summary.count} log</span>
+					</div>
+				) : null}
+			</div>
+		</button>
 	);
 };
+
+const CalendarMonthCaption = (_props: MonthCaptionProps) => (
+	<span className="hidden" />
+);
+const CalendarNav = (_props: NavProps) => <div className="hidden" />;
 
 export function CalendarView() {
 	const [month, setMonth] = useState(new Date(2026, 1, 1));
@@ -55,7 +66,9 @@ export function CalendarView() {
 	}, [selectedDate]);
 
 	const dayPickerComponents = {
-		DayContent: CalendarDayContent,
+		DayButton: CalendarDayButton,
+		MonthCaption: CalendarMonthCaption,
+		Nav: CalendarNav,
 	} as DayPickerProps["components"];
 
 	return (
@@ -131,6 +144,8 @@ export function CalendarView() {
 						month: "w-full",
 						table: "w-full border-separate border-spacing-3",
 						head: "hidden",
+						weekdays: "hidden",
+						weekday: "hidden",
 						row: "",
 						cell: "h-[120px] align-top",
 						day: "relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
@@ -139,6 +154,8 @@ export function CalendarView() {
 						day_outside: "opacity-40",
 					}}
 					components={dayPickerComponents}
+					hideNavigation
+					hideWeekdays
 					mode="single"
 					month={month}
 					onMonthChange={setMonth}
