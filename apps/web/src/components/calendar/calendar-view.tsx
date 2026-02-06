@@ -72,7 +72,7 @@ export function CalendarView() {
 	} as DayPickerProps["components"];
 
 	return (
-		<section className="relative flex h-full flex-col gap-6 bg-neutral-950 text-neutral-50">
+		<section className="relative flex h-svh w-full flex-col gap-6 bg-neutral-950 text-neutral-50">
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 opacity-60"
@@ -138,17 +138,20 @@ export function CalendarView() {
 
 			<div className="flex-1 px-6 pb-6">
 				<DayPicker
-					className="w-full"
+					className="h-full w-full"
 					classNames={{
-						months: "w-full",
-						month: "w-full",
-						table: "w-full border-separate border-spacing-3",
+						root: "h-full w-full",
+						months: "h-full w-full",
+						month: "h-full w-full",
+						month_grid: "h-full w-full border-separate border-spacing-3",
 						head: "hidden",
 						weekdays: "hidden",
 						weekday: "hidden",
+						weeks: "h-full",
+						week: "",
 						row: "",
 						cell: "h-[120px] align-top",
-						day: "align-top",
+						day: "h-full align-top",
 						day_button:
 							"relative flex h-full w-full flex-col rounded-xl border border-neutral-800 bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400",
 						day_today:
