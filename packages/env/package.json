@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./cors": {
+      "types": "./src/cors.ts",
+      "default": "./src/cors.ts"
+    },
     "./server": "./src/server.ts",
     "./web": "./src/web.ts"
   },
