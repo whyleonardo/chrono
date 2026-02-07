@@ -3,6 +3,12 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { KiboCalendar } from "./kibo-calendar";
 import type { CalendarEntryItem } from "./types";
 
+// Top-level regex constants for performance
+const FEBRUARY_REGEX = /February/i;
+const DAY_NUMBER_REGEX = /^\d+/;
+const PREVIOUS_MONTH_REGEX = /previous month/i;
+const LOG_ENTRY_REGEX = /1\s+log/;
+
 describe("KiboCalendar", () => {
 	const mockEntries: CalendarEntryItem[] = [
 		{
@@ -29,7 +35,7 @@ describe("KiboCalendar", () => {
 			/>
 		);
 
-		expect(screen.getByText(/February/i)).toBeInTheDocument();
+		expect(screen.getByText(FEBRUARY_REGEX)).toBeInTheDocument();
 	});
 
 	it("renders weekday labels", () => {
@@ -67,7 +73,7 @@ describe("KiboCalendar", () => {
 		const dayCell = dayButtons.find((btn) => {
 			const text = btn.textContent?.trim();
 			// Day cells have a number followed by optional content
-			return text && /^\d+/.test(text);
+			return text && DAY_NUMBER_REGEX.test(text);
 		});
 
 		if (dayCell) {
@@ -90,7 +96,7 @@ describe("KiboCalendar", () => {
 			/>
 		);
 
-		const prevButtons = screen.getAllByLabelText(/previous month/i);
+		const prevButtons = screen.getAllByLabelText(PREVIOUS_MONTH_REGEX);
 		expect(prevButtons.length).toBeGreaterThan(0);
 		fireEvent.click(prevButtons[0]);
 		expect(onMonthChange).toHaveBeenCalled();
@@ -107,7 +113,7 @@ describe("KiboCalendar", () => {
 		);
 
 		// Look for "1 log" text somewhere in the calendar
-		const logEntries = screen.getAllByText(/1\s+log/);
+		const logEntries = screen.getAllByText(LOG_ENTRY_REGEX);
 		expect(logEntries.length).toBeGreaterThan(0);
 	});
 });

@@ -7,13 +7,13 @@ import {
 	DialogTitle,
 } from "@chrono/ui/components/dialog";
 
-type DayDetailDialogProps = {
+interface DayDetailDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	dateLabel: string;
 	entryCount: number;
 	mood: "calm" | "focused" | "low" | "joy" | "neutral";
-};
+}
 
 export function DayDetailDialog({
 	open,

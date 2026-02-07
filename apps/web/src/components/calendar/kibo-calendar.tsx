@@ -108,7 +108,9 @@ export function KiboCalendar({
 	};
 
 	const isSelected = (date: Date) => {
-		if (!selected) return false;
+		if (!selected) {
+			return false;
+		}
 		return (
 			date.getDate() === selected.getDate() &&
 			date.getMonth() === selected.getMonth() &&
