@@ -31,6 +31,8 @@ export interface DayCellProps {
 	isSelected: boolean;
 	/** Whether this day is today */
 	isToday: boolean;
+	/** Whether this day is disabled (future date) */
+	isDisabled?: boolean;
 	/** Click handler */
 	onSelect: (date: Date) => void;
 }

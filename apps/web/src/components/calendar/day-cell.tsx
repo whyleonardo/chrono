@@ -9,6 +9,7 @@ export function DayCell({
 	entries,
 	isSelected,
 	isToday,
+	isDisabled,
 	onSelect,
 }: DayCellProps) {
 	const entryCount = entries.length;
@@ -16,23 +17,28 @@ export function DayCell({
 
 	const buttonClassName = useMemo(() => {
 		const baseClasses =
-			"relative flex h-full w-full flex-col rounded-xl border bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 hover:border-neutral-600 hover:bg-neutral-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400";
+			"relative flex h-full w-full flex-col rounded-xl border bg-neutral-950/40 p-3 text-left text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 aspect-[4/3]";
+
+		if (isDisabled) {
+			return `${baseClasses} border-neutral-800/50 text-neutral-600 cursor-not-allowed opacity-50`;
+		}
 
 		if (isSelected) {
-			return `${baseClasses} border-blue-500/80 bg-blue-950/40 text-blue-200`;
+			return `${baseClasses} border-blue-500/80 bg-blue-950/40 text-blue-200 hover:border-neutral-600 hover:bg-neutral-900`;
 		}
 
 		if (isToday) {
-			return `${baseClasses} border-neutral-500/80 bg-neutral-900`;
+			return `${baseClasses} border-neutral-500/80 bg-neutral-900 hover:border-neutral-600 hover:bg-neutral-800`;
 		}
 
-		return `${baseClasses} border-neutral-800 text-neutral-200`;
-	}, [isSelected, isToday]);
+		return `${baseClasses} border-neutral-800 text-neutral-200 hover:border-neutral-600 hover:bg-neutral-900`;
+	}, [isSelected, isToday, isDisabled]);
 
 	return (
 		<button
 			className={buttonClassName}
-			onClick={() => onSelect(date)}
+			disabled={isDisabled}
+			onClick={() => !isDisabled && onSelect(date)}
 			type="button"
 		>
 			<div className="flex h-full flex-col justify-between">

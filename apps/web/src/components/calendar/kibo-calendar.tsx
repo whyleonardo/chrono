@@ -118,6 +118,21 @@ export function KiboCalendar({
 		);
 	};
 
+	const isFutureDate = (date: Date) => {
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		return date > today;
+	};
+
+	const isFutureMonth = () => {
+		const today = new Date();
+		return (
+			month.getFullYear() > today.getFullYear() ||
+			(month.getFullYear() === today.getFullYear() &&
+				month.getMonth() > today.getMonth())
+		);
+	};
+
 	const getDateKey = (date: Date) => format(date, "yyyy-MM-dd");
 
 	return (
@@ -150,6 +165,7 @@ export function KiboCalendar({
 					</Button>
 					<Button
 						aria-label="Next month"
+						disabled={isFutureMonth()}
 						onClick={handleNextMonth}
 						size="icon-sm"
 						variant="ghost"
@@ -171,19 +187,21 @@ export function KiboCalendar({
 			</div>
 
 			<div className="h-full flex-1 px-6 pb-6">
-				<div className="grid h-full grid-cols-7 grid-rows-6 gap-3">
+				<div className="grid h-full grid-cols-7 grid-rows-6 gap-2">
 					{days.map((date) => {
 						const dateKey = getDateKey(date);
 						const dateEntries = entriesByDate[dateKey] ?? [];
 						const dateIsToday = isToday(date);
 						const dateIsSelected = isSelected(date);
 						const isOutsideMonth = date.getMonth() !== month.getMonth();
+						const dateIsDisabled = isFutureDate(date);
 
 						return (
 							<div className={isOutsideMonth ? "opacity-40" : ""} key={dateKey}>
 								<DayCell
 									date={date}
 									entries={dateEntries}
+									isDisabled={dateIsDisabled}
 									isSelected={dateIsSelected}
 									isToday={dateIsToday}
 									onSelect={handleSelectDate}
