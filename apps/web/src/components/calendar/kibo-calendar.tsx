@@ -47,34 +47,19 @@ export function KiboCalendar({
 	// Group entries by date for efficient lookup
 	const entriesByDate = useMemo(() => groupEntriesByDate(entries), [entries]);
 
-	// Generate days for the current month view
+	// Generate days for the current month view only
 	const days = useMemo(() => {
 		const year = month.getFullYear();
 		const monthIndex = month.getMonth();
 
-		// Get first day of month
-		const firstDay = new Date(year, monthIndex, 1);
 		// Get last day of month
 		const lastDay = new Date(year, monthIndex + 1, 0);
 
-		// Calculate days to show from previous month
-		const startDayOfWeek = firstDay.getDay();
 		const days: Date[] = [];
 
-		// Add days from previous month
-		for (let i = startDayOfWeek - 1; i >= 0; i--) {
-			days.push(new Date(year, monthIndex, -i));
-		}
-
-		// Add all days of current month
+		// Add all days of current month only
 		for (let i = 1; i <= lastDay.getDate(); i++) {
 			days.push(new Date(year, monthIndex, i));
-		}
-
-		// Add days from next month to complete the grid (6 rows * 7 cols = 42 cells)
-		const remainingCells = 42 - days.length;
-		for (let i = 1; i <= remainingCells; i++) {
-			days.push(new Date(year, monthIndex + 1, i));
 		}
 
 		return days;
@@ -136,7 +121,7 @@ export function KiboCalendar({
 	const getDateKey = (date: Date) => format(date, "yyyy-MM-dd");
 
 	return (
-		<section className="relative flex h-svh w-full flex-col gap-6 bg-neutral-950 text-neutral-50">
+		<section className="relative flex h-screen w-full flex-col gap-4 overflow-hidden bg-neutral-950 text-neutral-50">
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 opacity-60"
@@ -145,9 +130,9 @@ export function KiboCalendar({
 				<div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.1),transparent_45%)]" />
 			</div>
 
-			<header className="flex items-center justify-between px-6 pt-6">
+			<header className="flex flex-shrink-0 items-center justify-between px-6 pt-4">
 				<div>
-					<h2 className="font-semibold text-[32px] tracking-tight">
+					<h2 className="font-semibold text-[28px] tracking-tight">
 						{format(month, "MMMM")}
 					</h2>
 					<div className="text-neutral-500 text-sm uppercase tracking-[0.3em]">
@@ -178,7 +163,7 @@ export function KiboCalendar({
 				</div>
 			</header>
 
-			<div className="grid grid-cols-7 gap-3 px-6 text-[10px] text-neutral-500 uppercase tracking-[0.3em]">
+			<div className="grid flex-shrink-0 grid-cols-7 gap-2 px-6 text-[10px] text-neutral-500 uppercase tracking-[0.3em]">
 				{weekdayLabels.map((label) => (
 					<div className="text-center" key={label}>
 						{label}
@@ -186,18 +171,17 @@ export function KiboCalendar({
 				))}
 			</div>
 
-			<div className="h-full flex-1 px-6 pb-6">
-				<div className="grid h-full grid-cols-7 grid-rows-6 gap-2">
+			<div className="min-h-0 flex-1 px-6 pb-4">
+				<div className="grid h-full auto-rows-fr grid-cols-7 content-start gap-2">
 					{days.map((date) => {
 						const dateKey = getDateKey(date);
 						const dateEntries = entriesByDate[dateKey] ?? [];
 						const dateIsToday = isToday(date);
 						const dateIsSelected = isSelected(date);
-						const isOutsideMonth = date.getMonth() !== month.getMonth();
 						const dateIsDisabled = isFutureDate(date);
 
 						return (
-							<div className={isOutsideMonth ? "opacity-40" : ""} key={dateKey}>
+							<div className="h-full" key={dateKey}>
 								<DayCell
 									date={date}
 									entries={dateEntries}
