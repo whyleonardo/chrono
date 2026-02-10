@@ -348,9 +348,11 @@ export const CalendarMonthPicker = ({
 				empty: "No month found",
 				search: "Search month",
 			}}
-			setValue={(value) =>
-				setMonth(Number.parseInt(value, 10) as CalendarState["month"])
-			}
+			setValue={(value) => {
+				if (value) {
+					setMonth(Number.parseInt(value, 10) as CalendarState["month"]);
+				}
+			}}
 			value={month.toString()}
 		/>
 	);
@@ -381,7 +383,11 @@ export const CalendarYearPicker = ({
 				empty: "No year found",
 				search: "Search year",
 			}}
-			setValue={(value) => setYear(Number.parseInt(value, 10))}
+			setValue={(value) => {
+				if (value) {
+					setYear(Number.parseInt(value, 10));
+				}
+			}}
 			value={year.toString()}
 		/>
 	);
