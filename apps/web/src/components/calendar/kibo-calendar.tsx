@@ -172,7 +172,7 @@ export function KiboCalendar({
 			</div>
 
 			<div className="min-h-0 flex-1 px-6 pb-4">
-				<div className="grid h-full auto-rows-fr grid-cols-7 gap-2">
+				<div className="grid h-full auto-rows-fr grid-cols-7 content-center gap-2">
 					{days.map((date) => {
 						const dateKey = getDateKey(date);
 						const dateEntries = entriesByDate[dateKey] ?? [];
@@ -181,7 +181,10 @@ export function KiboCalendar({
 						const dateIsDisabled = isFutureDate(date);
 
 						return (
-							<div className="h-full w-full" key={dateKey}>
+							<div
+								className="flex h-full w-full items-center justify-center"
+								key={dateKey}
+							>
 								<DayCell
 									date={date}
 									entries={dateEntries}
