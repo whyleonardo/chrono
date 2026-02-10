@@ -36,6 +36,7 @@
         "@chrono/api": "workspace:*",
         "@chrono/auth": "workspace:*",
         "@chrono/env": "workspace:*",
+        "@chrono/types": "workspace:*",
         "@chrono/ui": "workspace:*",
         "@orpc/client": "catalog:",
         "@orpc/openapi": "catalog:",
