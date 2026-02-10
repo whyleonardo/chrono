@@ -181,7 +181,7 @@ export function KiboCalendar({
 						const dateIsDisabled = isFutureDate(date);
 
 						return (
-							<div className="h-full min-h-0" key={dateKey}>
+							<div className="h-full w-full" key={dateKey}>
 								<DayCell
 									date={date}
 									entries={dateEntries}
