@@ -17,7 +17,7 @@ export function DayCell({
 
 	const buttonClassName = useMemo(() => {
 		const baseClasses =
-			"relative flex w-full flex-col justify-between rounded-xl border bg-neutral-950/40 p-2 text-left text-sm transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 aspect-[9/16] md:aspect-[4/3]";
+			"relative flex h-full w-full flex-col justify-between rounded-xl border bg-neutral-950/40 p-1.5 text-left text-xs transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 md:p-2 md:text-sm";
 
 		if (isDisabled) {
 			return `${baseClasses} border-neutral-800/50 text-neutral-600 cursor-not-allowed opacity-50`;

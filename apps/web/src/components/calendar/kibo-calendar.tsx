@@ -163,7 +163,7 @@ export function KiboCalendar({
 				</div>
 			</header>
 
-			<div className="grid flex-shrink-0 grid-cols-7 gap-2 px-6 text-[10px] text-neutral-500 uppercase tracking-[0.3em]">
+			<div className="grid flex-shrink-0 grid-cols-7 gap-2 px-4 text-[10px] text-neutral-500 uppercase tracking-[0.3em] md:gap-4 md:px-6">
 				{weekdayLabels.map((label) => (
 					<div className="text-center" key={label}>
 						{label}
@@ -171,8 +171,8 @@ export function KiboCalendar({
 				))}
 			</div>
 
-			<div className="min-h-0 flex-1 px-6 pb-4">
-				<div className="grid h-full auto-rows-fr grid-cols-7 content-center gap-8">
+			<div className="min-h-0 flex-1 px-4 pb-4 md:px-6">
+				<div className="grid h-full auto-rows-fr grid-cols-7 content-center gap-2 md:gap-4">
 					{days.map((date) => {
 						const dateKey = getDateKey(date);
 						const dateEntries = entriesByDate[dateKey] ?? [];
