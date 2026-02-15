@@ -1,0 +1,74 @@
+/*
+ * TipTap editor styles.
+ * These use pseudo-elements and ProseMirror-specific selectors
+ * that can't be expressed as Tailwind utility classes.
+ */
+
+/* Remove default ProseMirror focus outline -- focus ring is on the wrapper */
+.chrono-editor .tiptap {
+	outline: none;
+}
+
+/* Base paragraph spacing */
+.chrono-editor .tiptap p {
+	margin: 0.375em 0;
+}
+
+.chrono-editor .tiptap p:first-child {
+	margin-top: 0;
+}
+
+.chrono-editor .tiptap p:last-child {
+	margin-bottom: 0;
+}
+
+/* Placeholder text via Placeholder extension's data-placeholder attribute */
+.chrono-editor .tiptap p.is-editor-empty:first-child::before {
+	content: attr(data-placeholder);
+	float: left;
+	height: 0;
+	pointer-events: none;
+	color: var(--muted-foreground, oklch(0.556 0 0));
+}
+
+/* Mood block chip styling -- vanilla node view rendered by mood-block extension */
+.chrono-editor .mood-block {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.125rem 0.625rem;
+	margin: 0.25rem 0;
+	border-radius: 9999px;
+	font-size: 0.75rem;
+	font-weight: 500;
+	line-height: 1.5;
+	cursor: default;
+	user-select: none;
+	background: var(--mood-standard-bg);
+	color: var(--mood-standard-text);
+	border: 1px solid var(--mood-standard-border);
+}
+
+.chrono-editor .mood-block[data-mood="flow"] {
+	background: var(--mood-flow-bg);
+	color: var(--mood-flow-text);
+	border-color: var(--mood-flow-border);
+}
+
+.chrono-editor .mood-block[data-mood="buggy"] {
+	background: var(--mood-buggy-bg);
+	color: var(--mood-buggy-text);
+	border-color: var(--mood-buggy-border);
+}
+
+.chrono-editor .mood-block[data-mood="learning"] {
+	background: var(--mood-learning-bg);
+	color: var(--mood-learning-text);
+	border-color: var(--mood-learning-border);
+}
+
+.chrono-editor .mood-block[data-mood="meetings"] {
+	background: var(--mood-meetings-bg);
+	color: var(--mood-meetings-text);
+	border-color: var(--mood-meetings-border);
+}
