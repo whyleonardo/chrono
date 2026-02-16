@@ -77,7 +77,8 @@ export function CalendarView() {
 			<DayDetailDialog
 				dateLabel={selectedDate ? format(selectedDate, "EEE, MMM d") : ""}
 				entryCount={entrySummary?.count ?? 0}
-				mood={entrySummary?.mood ?? "neutral"}
+				mood={entrySummary?.mood ?? "standard"}
+				date={selectedDate ? selectedDate.toISOString() : new Date().toISOString()}
 				onOpenChange={(open) => {
 					if (!open) {
 						setSelectedDate(undefined);
