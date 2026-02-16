@@ -51,3 +51,6 @@ temp
 
 # shadcn/ui generated symlinks
 apps/web/@chrono/
+
+# Git worktrees
+.worktrees/
